@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import mockData from "../assets/photos.json";
+import React, { useCallback, useEffect, useState } from "react";
+import mockData from "../../assets/photos.json";
 
-const ShowImage = ({ id, show, setShow }) => {
-  const [imgUrl, setImgUrl] = useState(
-    "https://images.unsplash.com/reserve/dRA4UuMBR2K5pxchYcxA_IMG_6965.JPG"
-  );
+const ImageModal = ({ id, show, setShow }) => {
+  const [imgUrl, setImgUrl] = useState(null);
+  const [loaded, setLoaded] = useState(false); //not used yet, make it useful
   const [imageDetails, setImageDetails] = useState({
     author: "",
     title: "",
@@ -23,34 +22,36 @@ const ShowImage = ({ id, show, setShow }) => {
       });
   }, [id]);
 
+  // const boxModal =useCallback((status)=>{
+  //   setShow(status)
+  // }),
+
   return (
     <>
       {show && (
-        // backdrop: full screen, click closes
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 no-scrollbar"
           onClick={() => setShow(false)}
         >
           {/* popup box: stops backdrop click, sized to 5/6 of viewport but clamped with max-h */}
           <div
-            className="relativew-full md:w-[90%]  h-[90%] max-h-[90vh] bg-white rounded-2xl shadow-xl overflow-y-auto p-4"
+            className="dark:bg-black/70 relativew-full md:w-[90%]  h-[90%] max-h-[90vh] bg-white/70 rounded-2xl shadow-xl overflow-y-auto p-4 no-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* close button top-right */}
-            <button
-              className=" fixed top-1.5 right-20 text-4xl font-bold"
-              onClick={() => setShow(false)}
-            >
-              ×
-            </button>
-
             {/* content */}
-            <div className="flex flex-col items-center justify-start gap-4 pt-6">
+            <div className="flex flex-col items-center justify-start gap-4 pt-6 no-scrollbar">
               <img
                 src={imgUrl}
                 alt="main img"
-                className="w-3/4 md:h-[50%] max-h-[50%] object-contain"
+                className="w-[98%] md:h-[70vh] object-contain"
               />
+              {/* close button top-right */}
+              <button
+                className=" fixed top-12 md:right-25 right-8 text-5xl font-bold dark:text-white"
+                onClick={() => setShow(false)}
+              >
+                ×
+              </button>
               <p>{id}</p>
 
               <div className="w-full text-justify">
@@ -72,4 +73,4 @@ const ShowImage = ({ id, show, setShow }) => {
   );
 };
 
-export default ShowImage;
+export default ImageModal;

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import Logo from "./logo";
+import Logo from "../Logo/Index";
 import { Link } from "react-router-dom";
 const Footer = () => {
   const SocialIcons = [
@@ -46,11 +46,7 @@ const Footer = () => {
                     key={data.alt}
                     className="list-none cursor-pointer select-none p-2 "
                   >
-                    <img
-                      src={data.url}
-                      alt="data.alt"
-                      className="h-[40px] m-1"
-                    />
+                    <img src={data.url} alt="data.alt" className="h-10 m-1" />
                   </li>
                 );
               })}

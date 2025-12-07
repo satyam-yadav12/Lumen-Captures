@@ -16,26 +16,7 @@ const Register = () => {
         {/* Login form */}
         <div className="w-full m-auto p-10 dark:bg-[#222224] bg-white h-full border border-white shadow-black drop-shadow-2xl  rounded-3xl col-start-1 md:col-span-2 md:col-start-2 grid grid-cols-1 md:grid-cols-2 gap-4">
           <h1 className="text-left font-bold text-2xl my-3 mt-1">Register</h1>
-          {/* <div className="text-left ">
-            <label htmlFor="username" className="text-left my-2 py-2">
-              <span className="py-2 my-2">Enter Email</span>
-              <input
-                type="text"
-                className="rounded-sm w-full m-auto border p-2 mb-2 border-gray-200 outline-1 outline-[#00A2CA] focus:outline-[#00A2CA]"
-                placeholder="Enter a Valid Email"
-              />
-            </label>
-          </div>
-          <div className="text-left my-2 py-2">
-            <label htmlFor="password" className="text-left">
-              <span className="py-2 my-2">Enter Password</span>
-              <input
-                type="text"
-                className="rounded-sm w-full m-auto border p-2 mb-2  border-gray-200 outline-1 outline-[#00A2CA] focus:outline-[#00A2CA]"
-                placeholder="Enter your Password"
-              />
-            </label>
-          </div> */}
+
           <div className="col-start-1 row-start-2 md:col-start-1 md:row-start-2 text-left">
             <label htmlFor="password" className="text-left">
               <span className="py-2 my-2">Enter Full Name</span>

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Searchinput = () => {
+const SearchBar = () => {
   const SearchKeyword = () => {
     console.log("search hit");
   };
@@ -51,4 +51,4 @@ const Searchinput = () => {
   );
 };
 
-export default Searchinput;
+export default SearchBar;

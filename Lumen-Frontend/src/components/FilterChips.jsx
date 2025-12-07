@@ -21,7 +21,6 @@ const FilterChips = ({ data = ["hello", "apply", "some", "filter"] }) => {
           </span>
         );
       })}
-      <p>{variant}</p>
     </div>
   );
 };

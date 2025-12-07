@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "../components/image";
+import Image from "../components/ImageCard/ImageCard";
 import mockData from "../assets/photos.json";
 
 const Collections = () => {

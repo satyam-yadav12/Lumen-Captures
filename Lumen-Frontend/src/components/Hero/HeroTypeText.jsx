@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function TypeText({ text, speed = 80 }) {
+export default function HeroTypeText({ text, speed = 80 }) {
   const [display, setDisplay] = useState("");
 
   useEffect(() => {
@@ -19,5 +19,7 @@ export default function TypeText({ text, speed = 80 }) {
     return () => clearInterval(interval);
   }, [text, speed]);
 
-  return <span className="typewriter-wrapper">{display}</span>;
+  return (
+    <span className="typewriter-wrapper w-[350px] text-wrap ">{display}</span>
+  );
 }

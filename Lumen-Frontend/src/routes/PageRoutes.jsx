@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
-import Profile from "../pages/Profile";
+import Profile from "../pages/Profile/Profile";
 import Collections from "../pages/Collections";
 import Uploads from "../pages/Uploads";
 import UploadImage from "../pages/UploadImage";
@@ -10,7 +10,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Developer from "../pages/Developer";
 import Contact from "../pages/Contact";
-import Layout from "./Layout";
+import Layout from "../components/Layout/Layout";
 
 const PageRoutes = () => {
   return (

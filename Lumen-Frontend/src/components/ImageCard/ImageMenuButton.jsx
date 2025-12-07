@@ -3,13 +3,13 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-export default function BasicMenu() {
+export default function ImageMenuButton({ TextValues }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClose = () => {
     setAnchorEl(null);
-    console.log("Hi");
   };
+
   return (
     <div>
       <Button
@@ -25,7 +25,7 @@ export default function BasicMenu() {
         <img
           src="https://cdn-icons-png.flaticon.com/128/3917/3917764.png"
           alt="Menu"
-          className="h-6 w-max object-contain px-2 ml-auto invert"
+          className="h-6 w-max object-contain pr-1 pl-3 mb-1 pb-1 dark:invert"
         />
       </Button>
       <Menu
@@ -42,22 +42,19 @@ export default function BasicMenu() {
           },
         }}
       >
-        <MenuItem
-          onClick={(e) => {
-            e.stopPropagation();
-            handleClose(null);
-          }}
-        >
-          Report content
-        </MenuItem>
-        <MenuItem
-          onClick={(e) => {
-            e.stopPropagation();
-            handleClose(null);
-          }}
-        >
-          Download
-        </MenuItem>
+        {TextValues.map((val, index) => {
+          return (
+            <MenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClose(null);
+              }}
+              key={index}
+            >
+              {val}
+            </MenuItem>
+          );
+        })}
       </Menu>
     </div>
   );

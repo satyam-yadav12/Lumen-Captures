@@ -1,17 +1,15 @@
 import React, { Suspense } from "react";
-// import Image from "../components/image";
-import Heroimg from "../components/Heroimg";
 import FilterChips from "../components/FilterChips";
-import ImageFallback from "../components/ImageFallback";
 import { CircularProgress } from "@mui/material";
+import Hero from "../components/Hero/Hero";
 
-const Image = React.lazy(() => import("../components/image"));
+const Image = React.lazy(() => import("../components/ImageCard/ImageCard"));
 
 const Home = () => {
   return (
     <div>
       <div>
-        <Heroimg />
+        <Hero />
       </div>
       <div>
         <FilterChips />

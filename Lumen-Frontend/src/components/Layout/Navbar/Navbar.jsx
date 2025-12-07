@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
-import Searchinput from "./Searchinput";
+import SearchBar from "./SearchBar";
 import { Button, Drawer } from "@mui/material";
 import MenuIcon from "@Mui/icons-material/Menu";
 
-import Logo from "./logo";
-import DrawerList from "./DrawerList";
-import { ThemeContext } from "../context/Themecontext";
+import Logo from "../../Logo/Index";
+
+import { ThemeContext } from "../../../context/Themecontext";
+import DrawerContent from "../DrawerContent";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -31,7 +32,7 @@ const Navbar = () => {
           <Logo />
         </div>
         <div className="col-span-2 order-last md:order-0  w-[97%] gap-0 ">
-          <Searchinput />
+          <SearchBar />
         </div>
         <div className="justify-self-end col-start-2 md:col-start-4 m-3 p-3 font-bold cursor-pointer ">
           {user ? (
@@ -65,7 +66,7 @@ const Navbar = () => {
             }
           >
             <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
-              <DrawerList
+              <DrawerContent
                 user={user}
                 isActive={isActive}
                 toggleDrawer={toggleDrawer}
