@@ -1,15 +1,83 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import mock_images from "../../assets/photos.json";
+import mock_images from "../../assets/photos_extracted.json";
 import ImageActionBar from "./ImageActionBar";
 import ImageOverlay from "./ImageOverlay";
 import ImageModal from "./ImageModal";
+import ImagePlace from "./Image";
+import { CircularProgress } from "@mui/material"
 
 const Image = ({ images = mock_images }) => {
   const [like, setLike] = useState([]);
-  const [loaded, setLoaded] = useState(false);
+
   const [show, setShow] = useState(false);
   const [showUri, setShowUri] = useState("");
+  //state for infinite scrolling; may need to move it from here
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
+  const [photos, setPhotos] = useState([]);
+  const limit = 10;
+  const observer = useRef(null);
+  const lastImageRef = useRef(null);
+
+
+
+  useEffect(() => {
+    setPhotos([]);
+    setPage(0);
+    setHasMore(true);
+  }, [images]);
+
+  //infinite scrolling hooks and functions
+
+
+  const loadMore = () => {
+    setPage((prev) => prev + 1);
+  };
+
+  useEffect(() => {
+
+    const fetchImages = async () => {
+
+      setLoading(true);
+      const start = limit * page;
+      const end = start + limit;
+      if (end <= photos.length) return;
+      const temp = images.slice(start, end); //crete api call
+
+      setPhotos((prev) => [...prev, ...temp]);
+      if (temp.length < limit) setHasMore(false);
+
+      setLoading(false);
+    };
+    fetchImages();
+  }, [page]);
+
+  useEffect(() => {
+    if (!hasMore || loading) return;
+
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        loadMore();
+      }
+    });
+
+    if (lastImageRef.current) {
+      observer.current.observe(lastImageRef.current);
+    }
+
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect()
+      }
+
+    }
+  }, [hasMore, loading, photos]);
+
+  //infinite scroll hooks and effects
 
   const handleLike = (id) => {
     if (like.includes(id)) {
@@ -35,33 +103,23 @@ const Image = ({ images = mock_images }) => {
       <div>
         <ImageModal id={showUri} show={show} setShow={createModal} />
       </div>
-      {images.map((data, index) => {
+      {photos.map((data, index) => {
         return (
           <div
-            key={index}
-            className="group hover:opacity-98 relative break-inside-avoid overflow-hidden rounded-xl my-4 w-[90vw] sm:w-[45vw] lg:w-[30vw]"
+            key={data.photo_id}
+            className={`group  hover:opacity-98 relative break-inside-avoid overflow-hidden rounded-xl my-4 h-max w-[90vw] sm:w-[45vw] lg:w-[30vw] `}
+
           >
-            <img
-              src={data.photo_image_url}
-              alt="img"
-              id={data.photo_id}
-              loading="lazy"
-              className={` object-cover m-auto rounded-xl w-full transition-opacity duration-500 ${
-                loaded ? "opacity-100" : "opacity-0"
-              } aspect-[${data.photo_width}/${data.photo_height}]`}
-              onClick={() => {
-                createModal(true);
-                setShowUri(data.photo_id);
-              }}
-              // aspectRatio={`${data.photo_width}/${data.photo_height}`}
-              onLoad={() => setLoaded(true)}
+            <ImagePlace
+              data={data}
+              index={index}
+              createModal={createModal}
+              setShowUri={setShowUri}
+              lastImageRef={lastImageRef}
+              photos={photos}
             />
 
-            <div
-              className={`w-full h-full animate-pulse bg-linear-to-r from-gray-400 via-gray-500 to-gray-400 border-gray-500 rounded-3xl aspect-[${
-                data.photo_width
-              }/${data.photo_height}]${loaded ? `opacity-0 ` : "opacity-100"} `}
-            ></div>
+
 
             {/*  image overlay */}
 
@@ -72,10 +130,13 @@ const Image = ({ images = mock_images }) => {
               handleLike={handleLike}
               like={like}
             />
+
             <ImageActionBar data={data} like={like} handleLike={handleLike} />
           </div>
         );
       })}
+      {loading && <CircularProgress />}
+      {!hasMore && <p>No more images to show</p>}
     </div>
   );
 };

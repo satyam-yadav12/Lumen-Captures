@@ -11,6 +11,8 @@ import Register from "../pages/Register";
 import Developer from "../pages/Developer";
 import Contact from "../pages/Contact";
 import Layout from "../components/Layout/Layout";
+import Test from "../pages/Test";
+
 
 const PageRoutes = () => {
   return (
@@ -27,6 +29,7 @@ const PageRoutes = () => {
           <Route path="contact" element={<Contact />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="test" element={<Test />} />
           <Route path="*" element={"Not found"} />
         </Route>
       </Routes>

@@ -7,7 +7,16 @@ const Feedback = () => {
       <div className="w-[90%] m-auto shadow-md shadow-gray-500 rounded-3xl p-3  my-5">
         {" "}
         <div className="h-15 my-5 text-black dark:text-white">
-          <Rating name="rating" size="large" defaultValue={0} />
+          <Rating
+            name="rating"
+            size="large"
+            defaultValue={0}
+            sx={{
+              "& .MuiRating-iconEmpty": {
+                color: "lightgray", // gray-200 outline
+              },
+            }}
+          />
         </div>
         <div className=" w-full md:w-5/6 m-auto flex flex-col justify-start items-start gap-3">
           <div className="gap-2  w-full md:w-5/6 flex flex-col md:flex-row justify-start items-center ">
@@ -18,7 +27,7 @@ const Feedback = () => {
               Enter Name{" "}
             </label>
             <input
-              className=" w-full md:w-5/6 mx-4 border border-black p-4 my-1  dark:bg-gray-200 dark:border-white dark:text-black "
+              className=" w-full md:w-5/6 mx-4 border border-black p-4 my-1  dark:bg-gray-100 dark:border-white dark:text-black "
               type="text"
               name="title"
               id="title"
@@ -32,7 +41,7 @@ const Feedback = () => {
               Enter Email{" "}
             </label>
             <input
-              className="  w-full md:w-5/6 border mx-4 border-black p-4 my-1  dark:bg-gray-200 dark:border-white dark:text-black "
+              className="  w-full md:w-5/6 border mx-4 border-black p-4 my-1  dark:bg-gray-100 dark:border-white dark:text-black "
               type="text"
               name="email"
               id="email"
@@ -47,7 +56,7 @@ const Feedback = () => {
               Enter Title
             </label>
             <input
-              className=" w-full md:w-5/6 mx-4 border border-black p-4 my-1  dark:bg-gray-200 dark:border-white dark:text-black"
+              className=" w-full md:w-5/6 mx-4 border border-black p-4 my-1  dark:bg-gray-100 dark:border-white dark:text-black"
               type="text"
               name="tag"
               id="Tag"
@@ -63,7 +72,7 @@ const Feedback = () => {
             <textarea
               name="description"
               id="description"
-              className=" w-full md:w-5/6  h-25 mx-4  border border-black p-4  my-1  dark:border-white dark:bg-gray-200 dark:text-black"
+              className=" w-full md:w-5/6  h-25 mx-4  border border-black p-4  my-1  dark:border-white dark:bg-gray-100 dark:text-black"
             ></textarea>
           </div>
 

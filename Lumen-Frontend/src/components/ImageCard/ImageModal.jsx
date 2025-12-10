@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import mockData from "../../assets/photos.json";
+import mockData from "../../assets/photos_extracted.json";
 
 const ImageModal = ({ id, show, setShow }) => {
   const [imgUrl, setImgUrl] = useState(null);
@@ -33,7 +33,6 @@ const ImageModal = ({ id, show, setShow }) => {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 no-scrollbar"
           onClick={() => setShow(false)}
         >
-          {/* popup box: stops backdrop click, sized to 5/6 of viewport but clamped with max-h */}
           <div
             className="dark:bg-black/70 relativew-full md:w-[90%]  h-[90%] max-h-[90vh] bg-white/70 rounded-2xl shadow-xl overflow-y-auto p-4 no-scrollbar"
             onClick={(e) => e.stopPropagation()}
