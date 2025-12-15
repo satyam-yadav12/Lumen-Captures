@@ -7,23 +7,24 @@ import Logo from "../../Logo/Index";
 
 import { ThemeContext } from "../../../context/Themecontext";
 import DrawerContent from "../DrawerContent";
+import { AuthContext } from "../../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const { user } = useContext(AuthContext)
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState("");
+
   const [isActive, setIsActive] = useState("false");
 
   const { theme: mode, toggleTheme } = useContext(ThemeContext);
-
+  const navigate = useNavigate()
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
   const changeActive = () => {
     setIsActive(true);
   };
-  const testDrawer = () => {
-    user == "" && setUser("test");
-  };
+
 
   return (
     <div>
@@ -52,7 +53,7 @@ const Navbar = () => {
                 {mode}
               </Button>
               <Button
-                onClick={testDrawer}
+                onClick={() => navigate('/login')}
                 className="inline"
                 variant="outlined"
               >

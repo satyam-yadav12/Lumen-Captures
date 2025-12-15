@@ -8,6 +8,7 @@ from flask_jwt_extended import (
     set_refresh_cookies,
     decode_token,
 )
+from datetime import datetime, timezone
 from ..extensions import mongo
 from flask import jsonify
 import random
@@ -32,13 +33,12 @@ def create_user_data(data, username, profile_url):
     user_details = {
         "Full_name": data.get("Full_name"),
         "Email": data.get("Email"),
-        "Phone": data.get("Mobile"),
         "Password": hashed_password,
         "Username": username,
         "City": data.get("City"),
         "Agree": data.get("Agree"),
         "Profile_picture": profile_url,
-        "Last_login": "None",
+        "created_at": datetime.now(timezone.utc),
         "Contribution_count": "None",
     }
     return user_details

@@ -14,6 +14,7 @@ from flask_jwt_extended import (
 )
 from dotenv import load_dotenv
 import os
+from datetime import datetime, timezone
 
 
 load_dotenv()
@@ -52,7 +53,7 @@ def generate_token_by_google_info(data):
                 "Username": username,
                 "Agree": True,
                 "Profile_picture": profile_img_url,
-                "Last_login": "None",
+                "created_at": datetime.now(timezone.utc),
                 "Contribution_count": "None",
             }
 

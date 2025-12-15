@@ -7,9 +7,19 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { ThemeContext } from "../../context/Themecontext";
+import { AuthContext } from "../../context/AuthContext"
+import { LogoutFromLumen } from "../../services/authApi";
 
 const DrawerContent = ({ user, isActive, toggleDrawer, changeActive }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const { user: name, setUser } = useContext(AuthContext)
+
+  const handleLogOut = (async () => {
+    const ApiResult = await LogoutFromLumen();
+    console.log(ApiResult)
+    setUser("")
+  })
+
   return (
     <div
       className={
@@ -20,11 +30,10 @@ const DrawerContent = ({ user, isActive, toggleDrawer, changeActive }) => {
     >
       <Box sx={{ width: 250 }} role="presentation">
         <div className="ml-auto  p-3 shadow-sm rounded-sm shadow-gray-500  font-semibold text-2xl mt-[50px] w-[95%]  m-auto flex ">
-          <p className="inline mr-auto ">{user ? user : "Login / Register"}</p>
+          <p className="inline mr-auto ">{name ? name : "Login"}</p>
           <span
-            className={`ml-auto mr-3 px-3 cursor-pointer rotate-element ${
-              isActive ? "active-state" : ""
-            }`}
+            className={`ml-auto mr-3 px-3 cursor-pointer rotate-element ${isActive ? "active-state" : ""
+              }`}
             onClick={toggleDrawer(false)}
           >
             X
@@ -61,7 +70,7 @@ const DrawerContent = ({ user, isActive, toggleDrawer, changeActive }) => {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton>
-              <ListItemText primary={"Log Out"} />
+              <ListItemText primary={<button onClick={handleLogOut}>Log Out</button>} />
             </ListItemButton>
           </ListItem>
         </List>

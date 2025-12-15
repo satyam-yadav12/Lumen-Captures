@@ -3,9 +3,11 @@ import React, { useContext, useEffect, useState } from "react";
 import HeroTypeText from "./HeroTypeText";
 import { ThemeContext } from "../../context/Themecontext";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 const Hero = () => {
   const [tag, setTag] = useState("Discover, search, and share images");
+  const { user } = useContext(AuthContext)
   const navigate = useNavigate();
 
   const { theme: mode, Imgtag } = useContext(ThemeContext);
@@ -63,14 +65,25 @@ const Hero = () => {
           </h2>
 
           <div className="p-2 m-3 flex justify-center">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate("/login")}
-            >
-              {" "}
-              Login / Register
-            </Button>
+            {user ?
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate("/upload-image")}
+              >
+                {" "}
+                Ho gaya kam
+              </Button>
+
+              :
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate("/login")}
+              >
+                {" "}
+                Login / Register
+              </Button>}
           </div>
         </div>
       </div>

@@ -12,13 +12,10 @@ class user_registration_schema(Schema):
     )
 
     Email = fields.Email(
-        required=True, error_messages={"Email Error": "Enter a valid Email"}
-    )
-    Mobile = fields.String(
         required=True,
-        error_messages={"required": "phone number required"},
-        validate=validate.Regexp(r"^[6-9]\d{9}$", error="invalid mobile number"),
+        error_messages={"Email Error": "Enter a valid Email"},
     )
+
     Password = fields.String(
         required=True,
         validate=validate.Regexp(
@@ -33,13 +30,6 @@ class user_registration_schema(Schema):
     )
 
     City = fields.String(error_messages={"type error": "city should be a string"})
-
-    Gender = fields.String(
-        required=True,
-        validate=validate.OneOf(
-            ["Male", "Female", "Other"], error="invalid gender value"
-        ),
-    )
 
     Agree = fields.Boolean(
         required=True, error_messages={"required": "True or false required"}

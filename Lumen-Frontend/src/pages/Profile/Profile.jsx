@@ -1,7 +1,9 @@
 import { Button } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import Uploads from "../Uploads";
 import UpdatePassword from "./UpdatePassword";
+import { getProfile } from "../../services/userContent-Profile";
+import { AuthContext } from "../../context/AuthContext";
 
 const Data = {
   Full_name: "John Doe",
@@ -15,14 +17,51 @@ const Data = {
   Last_login: "2025-11-18T05:00:00Z", // Timestamp
   Contribution_count: 42, // Number of contributions
 };
-const Profile = ({ userData = Data }) => {
+const Profile = () => {
   const [disableEdit, setDisableEdit] = useState(true);
-
+  const { logout } = useContext(AuthContext)
   const [profileData, setProfileData] = useState({
-    Full_name: userData.Full_name,
-    City: userData.City,
-    Mobile: userData.Mobile,
+    Full_name: "",
+    City: "",
+    Phone: "",
+    Username: "",
+    Email: "",
+    Profile_picture: ""
   });
+
+  useEffect(() => {
+    let tempProfile = {
+      Full_name: "",
+      City: "",
+      Phone: "",
+      Username: "",
+      Email: "",
+      Profile_picture: ""
+    }
+    const fetchProfileData = (async () => {
+      const response = await getProfile()
+      console.log(response)
+      const responseField = response.data["user details"]
+      for (const key in tempProfile) {
+        if (key in responseField) {
+          tempProfile[key] = responseField[key]
+        }
+      }
+      console.log(tempProfile)
+      setProfileData(tempProfile)
+    })
+    try {
+      fetchProfileData()
+    }
+    catch (error) {
+      if (error.response.status === 401) {
+        logout()
+      }
+      console.log(error)
+    }
+  }, [])
+
+
   const openPicture = (e) => {
     console.log("Profile picture clicked:", e.target.src);
     // Additional logic to handle picture click can be added here
@@ -38,7 +77,7 @@ const Profile = ({ userData = Data }) => {
   return (
     <div>
       <div className="grid grid-cols-2 gap-2 w-full md:w-5/6 m-auto text-center my-7  border-b-2 border-gray-500 p-4">
-        <h1 className="text-2xl font-bold m-auto">{userData.Username}</h1>
+        <h1 className="text-2xl font-bold m-auto">{profileData.Username}</h1>
         <div
           className={
             disableEdit ? "w-max text-center m-auto md:mr-auto p-2" : "hidden"
@@ -53,8 +92,8 @@ const Profile = ({ userData = Data }) => {
         <div className="columns-1 gap-3 w-1/2 m-auto md:mx-0 md:ml-auto">
           <img
             src={
-              userData.Profile_picture
-                ? userData.Profile_picture
+              profileData.Profile_picture != ""
+                ? profileData.Profile_picture
                 : "https://cdn-icons-png.flaticon.com/128/149/149071.png"
             }
             alt="profile"
@@ -93,7 +132,7 @@ const Profile = ({ userData = Data }) => {
               </span>{" "}
               <input
                 type="text"
-                value={userData.Email}
+                value={profileData.Email}
                 disabled={true}
                 className="inline m-2 text-2xl font-semibold border p-2  pl-4"
               />
@@ -123,7 +162,7 @@ const Profile = ({ userData = Data }) => {
               </span>{" "}
               <input
                 type="text"
-                value={profileData.Mobile}
+                value={profileData.Phone}
                 disabled={disableEdit}
                 onChange={(e) =>
                   setProfileData((prev) => ({
@@ -152,7 +191,7 @@ const Profile = ({ userData = Data }) => {
           </Button>
         </div>
       </div>
-      <UpdatePassword/>
+      <UpdatePassword />
       <Uploads />
     </div>
   );
@@ -267,8 +306,8 @@ export default Profile;
 // const UploadsMemo = React.memo(Uploads);
 
 // // === Main optimized Profile component ===
-// const Profile = ({ userData }) => {
-//   // Fall back data if userData is not provided
+// const Profile = ({ profileData }) => {
+//   // Fall back data if profileData is not provided
 //   const base = useMemo(
 //     () => ({
 //       Full_name: "John Doe",
@@ -282,8 +321,8 @@ export default Profile;
 //   );
 
 //   const data = useMemo(
-//     () => ({ ...base, ...(userData || {}) }),
-//     [base, userData]
+//     () => ({ ...base, ...(profileData || {}) }),
+//     [base, profileData]
 //   );
 
 //   // Editing mode (controls whether Save appears)
