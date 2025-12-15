@@ -21,6 +21,7 @@ def upload_new_img():
     img = request.files["picture"]
     id = get_jwt()
     username = id["username"]
+    Uri = ""
 
     try:
         if username and img and img_data:
@@ -39,11 +40,19 @@ def upload_new_img():
                 insert_id = insert_img_data(img_collection_data)
 
             return (
-                jsonify({"msg": "image uploaded successfull", "insert_id": insert_id}),
+                jsonify(
+                    {
+                        "msg": "image uploaded successfull",
+                        "insert_id": insert_id,
+                        "image_id": img_id,
+                    }
+                ),
                 200,
             )
     except Exception as e:
-        return jsonify({"unexpected error occured": str(e)})
+        if Uri != "":
+            delete_user_img(img_id)
+        return jsonify({"unexpected error occured": str(e)}), 400
 
 
 # route("/uploads", methods=["GET"])

@@ -32,11 +32,8 @@ export const LogoutFromLumen = (async () => {
 })
 
 export const CheckActiveSession = (async () => {
-    try {
-        const response = await axiosApi.get("/me")
-        return response.data
-    } catch (error) {
-        throw error
-    }
+    return await axiosApi.get("/me", {
+        allowUnauth: true
+    })
 })
 

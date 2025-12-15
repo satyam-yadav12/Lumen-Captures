@@ -5,9 +5,20 @@ const axiosApi = axios.create({
     baseURL: "http://localhost:5000", // your backend URL
     withCredentials: true              // send HttpOnly cookies automatically
 });
+const PUBLIC_ROUTES = [
+    "/login",
+    "/register",
+    "/refresh/action",
+
+    "/lumen/search"
+];
 
 let isRefreshing = false;
 let failedQueue = [];
+
+const isPublicRoute = (url = "") => {
+    return PUBLIC_ROUTES.some(route => url.includes(route));
+};
 
 const processQueue = (error, data = null) => {
     failedQueue.forEach(prom => {
@@ -23,6 +34,9 @@ axiosApi.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
+        if (isPublicRoute(originalRequest.url)) {
+            return Promise.reject(error);
+        }
         // If access token expired (401 unauthorized)
         if (error.response?.status === 401 && !originalRequest._retry) {
 
@@ -39,7 +53,7 @@ axiosApi.interceptors.response.use(
             try {
                 // 🔥 Silent call to refresh endpoint
                 await axios.post(
-                    "/refresh",
+                    "http://localhost:5000/refresh/action",
                     {},
                     { withCredentials: true }
                 );
@@ -53,8 +67,10 @@ axiosApi.interceptors.response.use(
                 processQueue(refreshError, null);
 
                 // 🔥 If refresh token also expired → logout
+                if (!originalRequest.allowUnauth) {
+                    window.location.href = "/login"
+                }
 
-                window.location.href = "/login";
 
                 return Promise.reject(refreshError);
 

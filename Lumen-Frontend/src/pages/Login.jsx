@@ -1,30 +1,41 @@
 import { Button } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginWithLumen } from "../services/authApi";
 import { AuthContext } from "../context/AuthContext";
 import { AlertContext } from "../context/AlertMessage";
 // import { AlertContext } from "../context/AlertMessage";
 
 const Login = () => {
+  const navigate = useNavigate()
 
   const { user, setUser, logout } = useContext(AuthContext)
   const { message, setMessage } = useContext(AlertContext)
   const [formData, setFormData] = useState({ Email: "", Password: "" })
-
+const [disableSubmit, setDisableSubmit] = useState(false)
 
   const handleLogin = (async () => {
+    setDisableSubmit(()=>true)
     user && logout();
-    if (formData['Email'] != "" && formData['Password'] != "") {
-      const result = await LoginWithLumen(formData)
-      console.log(result['user name'])
-      setUser(result['user name'])
-      setMessage(`Welcome ${result['user name']}!`)
+    try {
+      if (formData['Email'] != "" && formData['Password'] != "") {
+        const result = await LoginWithLumen(formData)
+        console.log(result['user name'])
+        setUser(result['user name'])
+        setMessage(`Welcome ${result['user name']}!`)
+        setDisableSubmit(()=>false)
+        navigate('/')
+      }
+    } catch (error) {
+      console.log(error)
+      setMessage(error.response.data['error'])
     }
 
 
-    setFormData({ Email: "", Password: "" })
 
+    setFormData({ Email: "", Password: "" })
+    setDisableSubmit(()=>false)
+    
   });
   return (
     <>
@@ -67,7 +78,7 @@ const Login = () => {
               </label>
             </div>
             <div className="flex flex-col justify-center bg-[#00A2CA] dark:bg-white  dark:text-black text-white rounded-sm my-2  font-semibold">
-              <Button onClick={handleLogin} color="inherit">
+              <Button onClick={handleLogin} color="inherit" disable={disableSubmit}>
                 Login
               </Button>
             </div>

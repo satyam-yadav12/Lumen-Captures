@@ -72,7 +72,7 @@ const Hero = () => {
                 onClick={() => navigate("/upload-image")}
               >
                 {" "}
-                Ho gaya kam
+                Upload an Image
               </Button>
 
               :

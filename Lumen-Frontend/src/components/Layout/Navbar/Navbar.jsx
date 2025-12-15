@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
 import { Button, Drawer } from "@mui/material";
 import MenuIcon from "@Mui/icons-material/Menu";
@@ -9,9 +9,10 @@ import { ThemeContext } from "../../../context/Themecontext";
 import DrawerContent from "../DrawerContent";
 import { AuthContext } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { CheckActiveSession } from "../../../services/authApi";
 
 const Navbar = () => {
-  const { user } = useContext(AuthContext)
+  const { user, } = useContext(AuthContext)
   const [open, setOpen] = useState(false);
 
   const [isActive, setIsActive] = useState("false");
@@ -24,6 +25,9 @@ const Navbar = () => {
   const changeActive = () => {
     setIsActive(true);
   };
+
+
+
 
 
   return (

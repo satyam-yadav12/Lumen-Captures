@@ -12,12 +12,12 @@ const Register = () => {
   const { message, setMessage } = useContext(AlertContext)
   const [records, setRecords] = useState({ Full_name: "", Email: "", Password: "", ConfirmPassword: "", City: "", Agree: false })
   const [ProfilePicture, setProfilePicture] = useState(null)
-
+  const [disableSubmit, setDisableSubmit] = useState(false)
 
 
   const handleRegister = (async (e) => {
     e.preventDefault()
-
+    setDisableSubmit(() => true)
     // const payload = { ...records, "Profile_picture": ProfilePicture, "Agree": true }//need to fix
 
     const formData = new FormData()
@@ -26,17 +26,19 @@ const Register = () => {
       formData.append(key, records[key]);
     }
     formData.append("Profile_picture", ProfilePicture)
-  
+
     try {
       const response = await RegisterWithLumen(formData)
       setMessage("Registration success")
       console.log(response)
+      setDisableSubmit(() => false)
       navigate("/login")
     } catch (error) {
       setMessage("registration fail")
       console.log(error)
 
     }
+    setDisableSubmit(() => false)
   });
 
   const handleFormChange = ((e) => {
@@ -141,7 +143,7 @@ const Register = () => {
             <input type="checkbox" name="Agree" value={records.Agree} onChange={(e) => setRecords((prev) => ({ ...prev, [e.target.name]: !prev.Agree }))} /><span>Agree with Terms&Condition</span>
           </div>
           <div className="flex flex-col justify-center md:col-span-2 w-full p-1 m-auto text-centerrow-start-9 md:row-start-6 bg-[#00A2CA] dark:bg-white dark:text-black  rounded-sm my-2 text-white font-semibold">
-            <Button onClick={e => handleRegister(e)} color="inherit">
+            <Button onClick={e => handleRegister(e)} color="inherit" disable={disableSubmit}>
               Register
             </Button>
           </div>

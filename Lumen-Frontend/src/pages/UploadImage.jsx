@@ -1,20 +1,86 @@
 import { Button } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { UploadImageToLumen } from "../services/userContent-Profile";
+import { AlertContext } from "../context/AlertMessage";
 
 const UploadImage = () => {
-  const [image, setImage] = useState("");
+  const { setMessage } = useContext(AlertContext)
+  const [imagePreview, setImagePreview] = useState("");
+  const { user, logout } = useContext(AuthContext)
+  const [imageDetails, setImageDetails] = useState({ title: "", description: "", tags: [] })
+  const [payloadImage, setPayloadImage] = useState(null)
+  const [disableSubmit, setDisableSubmit] = useState(false)
 
   const handleFile = (e) => {
     const file = e.target.files[0];
-    if (!file) setImage("");
-    setImage(URL.createObjectURL(file));
+    if (!file) {
+      setImagePreview("");
+      setPayloadImage(null)
+    };
+    setImagePreview(URL.createObjectURL(file));
+    setPayloadImage(e.target.files[0])
   };
+
+  const uploadImageDetails = (async (payload) => {
+    let message;
+    try {
+      const response = await UploadImageToLumen(payload)
+      message(`Image with ID ${response.data["image_id"]} was stored in server`)
+
+    } catch (error) {
+      if (error.resoponse.status === 401) {
+        logout()
+      }
+      console.log(error)
+      message("failed to upload image")
+    }
+    return message
+  })
+  const handleSubmit = (async (e) => {
+    e.preventDefault()
+    setDisableSubmit(() => true)
+    let payload = new FormData()
+    for (const key in imageDetails) {
+      if (key != "tags") {
+        payload.append(key, imageDetails[`${key}`])
+      } else {
+
+        payload.append("tags", JSON.stringify(imageDetails['tags']))
+      }
+
+    }
+    payload.append('picture', payloadImage)
+    console.log(payload)
+    const msg = await uploadImageDetails(payload)
+    setMessage(msg)
+
+    setDisableSubmit(() => false)
+    return
+  })
+
+  const handleChange = ((e) => {
+    if (e.target.name != "tags") {
+      setImageDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    }
+    else {
+      let text = e.target.value
+      let tagContainer = text.split(" ")
+
+      setImageDetails((prev) => ({ ...prev, [e.target.name]: tagContainer }))
+    }
+
+  })
+  useEffect(() => {
+    console.log(imageDetails, 'imageDetails')
+  }, [imageDetails])
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5  mt-5 overflow-hidden m-auto">
       <div className="lg:ml-auto my-auto col-start-1 row-start-1">
-        {image ? (
+        {imagePreview ? (
           <img
-            src={image}
+            src={imagePreview}
             alt="preview"
             className="h-full max-h-[430px] w-full  object-contain bg-gray-100"
           />
@@ -47,12 +113,16 @@ const UploadImage = () => {
             className="border border-black p-4 my-1 block dark:bg-gray-100 dark:border-white dark:text-black "
             type="text"
             name="title"
+            onChange={handleChange}
+            value={imageDetails.title}
             id="title"
           />
           <label htmlFor="description">Enter Description</label>
           <textarea
             name="description"
             id="description"
+            onChange={handleChange}
+            value={imageDetails.description}
             className="  border border-black p-4  my-1 block dark:border-white dark:bg-gray-100 dark:text-black"
           ></textarea>
 
@@ -60,13 +130,15 @@ const UploadImage = () => {
           <input
             className="border border-black p-4 my-1 block dark:bg-gray-100 dark:border-white dark:text-black"
             type="text"
-            name="tag"
+            name="tags"
+            value={imageDetails.tags.join(" ")}
+            onChange={handleChange}
             id="Tag"
           />
         </div>
       </div>
       <div className="m-auto my-4 col-span-2">
-        <Button variant="contained">Upload Image</Button>
+        <Button variant="contained" disable={disableSubmit} onClick={(e) => handleSubmit(e)}>Upload Image</Button>
       </div>
     </div>
   );

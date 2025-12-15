@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from marshmallow import ValidationError
-from flask_jwt_extended import unset_jwt_cookies, get_jwt_identity
+from flask_jwt_extended import unset_jwt_cookies, get_jwt_identity, get_jwt
 from pymongo.errors import DuplicateKeyError
 from ..services.authorization_helpers import (
     validate_user_data,
@@ -126,4 +126,6 @@ def logout():
 
 def get_me():
     id = get_jwt_identity()
-    return jsonify({"msg": f"welcome {id}!"})
+    username = get_jwt()["username"]
+
+    return jsonify({"msg": f"welcome {id}!", "username": username})
