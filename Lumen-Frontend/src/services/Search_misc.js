@@ -3,7 +3,7 @@ import axiosApi from "./refreshToken";
 
 export const saveToCollection = (async (img_id) => {
     try {
-        const response = await axiosApi.get(`/image/save/${img_id}`)
+        const response = await axiosApi.post(`/images/save/${img_id}`)
         return response.data
     }
     catch (error) {
@@ -14,7 +14,7 @@ export const saveToCollection = (async (img_id) => {
 
 export const removeFromSaved = (async (img_id) => {
     try {
-        const response = await axiosApi.delete(`/image/unsave/${img_id}`)
+        const response = await axiosApi.delete(`/images/unsave/${img_id}`)
         return response.data
     }
     catch (error) {
@@ -25,7 +25,7 @@ export const removeFromSaved = (async (img_id) => {
 
 export const fetchCollection = (async () => {
     try {
-        const response = await axiosApi.get("/image/collections")
+        const response = await axiosApi.get("/images/collection")
         return response.data
     }
     catch (error) {
@@ -72,7 +72,7 @@ export const SearchKeyword = (async (keyword, page = 1) => {
 
 export const fetchAllImages = (async () => {
     try {
-        const response = await axiosApi.get(`/lumen/fetchAllImages`)
+        const response = await axiosApi.get(`/lumen/allimages`)
         return response.data
     }
     catch (error) {

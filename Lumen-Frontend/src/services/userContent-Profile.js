@@ -58,13 +58,10 @@ export const deleteAccount = (async () => {
 
 
 export const UploadImageToLumen = (async (payload) => {
-    try {
-        const response = await axiosApi.post("/user/upload-new", payload)
-        return response.data
-    }
-    catch (error) {
-        throw error
-    }
+
+    const response = await axiosApi.post("/user/upload-new", payload)
+    return response
+
 })
 
 

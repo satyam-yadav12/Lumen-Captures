@@ -18,7 +18,12 @@ from ..utils.db import (
 
 def upload_new_img():
     img_data = request.form
-    img = request.files["picture"]
+    try:
+        img = request.files["picture"]
+
+    except Exception as e:
+        return jsonify({"unexpected error occured": str(e)}), 400
+
     id = get_jwt()
     username = id["username"]
     Uri = ""

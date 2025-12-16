@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import mock_images from "../../assets/photos_extracted.json";
 import ImageActionBar from "./ImageActionBar";
@@ -6,8 +6,15 @@ import ImageOverlay from "./ImageOverlay";
 import ImageModal from "./ImageModal";
 import ImagePlace from "./Image";
 import { CircularProgress } from "@mui/material"
+import { fetchCollection, removeFromSaved, saveToCollection } from "../../services/Search_misc";
+import { AuthContext } from "../../context/AuthContext"
+import { useNavigate } from "react-router-dom"
+import { AlertContext } from "../../context/AlertMessage";
 
 const Image = ({ images = mock_images }) => {
+  const { user, logout } = useContext(AuthContext)
+  const { setMessage } = useContext(AlertContext)
+  const navigate = useNavigate()
   const [like, setLike] = useState([]);
 
   const [show, setShow] = useState(false);
@@ -35,6 +42,9 @@ const Image = ({ images = mock_images }) => {
   const loadMore = () => {
     setPage((prev) => prev + 1);
   };
+  useEffect(() => {
+    console.log(photos, "photos")
+  }, [photos])
 
   useEffect(() => {
 
@@ -43,7 +53,7 @@ const Image = ({ images = mock_images }) => {
       setLoading(true);
       const start = limit * page;
       const end = start + limit;
-      if (end <= photos.length) return;
+
       const temp = images.slice(start, end); //crete api call
 
       setPhotos((prev) => [...prev, ...temp]);
@@ -52,7 +62,7 @@ const Image = ({ images = mock_images }) => {
       setLoading(false);
     };
     fetchImages();
-  }, [page]);
+  }, [page, images]);
 
   useEffect(() => {
     if (!hasMore || loading) return;
@@ -79,17 +89,77 @@ const Image = ({ images = mock_images }) => {
 
   //infinite scroll hooks and effects
 
-  const handleLike = (id) => {
+
+  //manage likes
+  useEffect(() => {
+    const fetchLikedImages = (async () => {
+      console.log(user, 'userstatsu')
+      if (!user) {
+        setLike([])
+        return;
+      }
+
+      try {
+        const response = await fetchCollection()
+        console.log(response, 'likes')
+        let tempLikes = []
+        response['collection'].map((val, index) => {
+          tempLikes.push(val.img_id)
+        })
+        console.log(tempLikes, 'temp')
+        setLike(tempLikes)
+      } catch (error) {
+        if (response.data.status && response.data.status === 401) {
+
+          logout()
+
+        }
+      }
+
+    })
+    fetchLikedImages()
+  }, [user])
+  const sendLikeToLumen = (async (img_id) => {
+    try {
+      const response = await saveToCollection(img_id)
+      console.log(response)
+      setMessage(`like sent`)
+    } catch (error) {
+      if (response.data.status && response.data.status === 401) {
+
+        logout()
+        navigate('/login')
+      }
+      console.log(error)
+    }
+  })
+  const removeLikeFromLumen = (async (img_id) => {
+    try {
+      const response = await removeFromSaved(img_id)
+      console.log(response)
+      setMessage(`dislike sent`)
+    } catch (error) {
+      if (response.data.status && response.data.status === 401) {
+
+        logout()
+        navigate('/login')
+      }
+    }
+  })
+  const handleLike = (async (id) => {
     if (like.includes(id)) {
+      removeLikeFromLumen(id)
       setLike((prev) => {
         let newArr = prev.filter((val) => val != id);
+
         return newArr;
       });
     } else {
+      sendLikeToLumen(id)
       setLike((prev) => [...prev, id]);
     }
-  };
-
+  });
+  //manage likes
   const createModal = (state) => {
     setShow(state);
     state
@@ -106,7 +176,7 @@ const Image = ({ images = mock_images }) => {
       {photos.map((data, index) => {
         return (
           <div
-            key={data.photo_id}
+            key={data.photo_id || data.img_id}
             className={`group  hover:opacity-98 relative break-inside-avoid overflow-hidden rounded-xl my-4 h-max w-[90vw] sm:w-[45vw] lg:w-[30vw] `}
 
           >

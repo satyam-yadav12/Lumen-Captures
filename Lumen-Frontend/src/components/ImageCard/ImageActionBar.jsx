@@ -6,10 +6,10 @@ const ImageActionBar = ({ data, like, handleLike }) => {
     <div className="h-12 p-2 block lg:hidden rounded-2xl">
       <div className="flex flex-row   ">
         <p className="h-full w-max  px-1 pt-1.5 mr-auto font-semibold">
-          {data.photographer_username}
+          {data.photographer_username || data.owner}
         </p>
         <div className="ml-auto flex flex-row">
-          {like.includes(`${data.photo_id}`) ? (
+          {like.includes(`${data.photo_id || data.img_id}`) ? (
             <img
               src="https://img.icons8.com/?size=64&id=aId5rVASLwDE&format=png"
               alt="like"
@@ -17,7 +17,7 @@ const ImageActionBar = ({ data, like, handleLike }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                handleLike(data.photo_id);
+                handleLike(data.photo_id || data.img_id);
               }}
             />
           ) : (
@@ -28,7 +28,7 @@ const ImageActionBar = ({ data, like, handleLike }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                handleLike(data.photo_id);
+                handleLike(data.photo_id || data.img_id);
               }}
             />
           )}

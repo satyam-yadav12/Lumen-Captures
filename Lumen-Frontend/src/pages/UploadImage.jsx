@@ -26,15 +26,19 @@ const UploadImage = () => {
     let message;
     try {
       const response = await UploadImageToLumen(payload)
-      message(`Image with ID ${response.data["image_id"]} was stored in server`)
+      message = `Image was uploaded`
 
+      // setMessage("image was uploaded")
     } catch (error) {
-      if (error.resoponse.status === 401) {
+      console.log(error)
+      message = error['message']
+      if (error.response.status === 401) {
         logout()
       }
-      console.log(error)
-      message("failed to upload image")
+
+
     }
+    setImageDetails({ title: "", description: "", tags: [] })
     return message
   })
   const handleSubmit = (async (e) => {
@@ -53,6 +57,7 @@ const UploadImage = () => {
     payload.append('picture', payloadImage)
     console.log(payload)
     const msg = await uploadImageDetails(payload)
+    console.log(msg, 'msg')
     setMessage(msg)
 
     setDisableSubmit(() => false)

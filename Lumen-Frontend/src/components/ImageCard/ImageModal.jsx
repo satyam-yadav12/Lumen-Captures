@@ -11,15 +11,12 @@ const ImageModal = ({ id, show, setShow }) => {
   });
 
   useEffect(() => {
-    let uri = mockData.filter((val) => val.photo_id == id);
-
-    uri.length > 0 && setImgUrl(uri[0].photo_image_url);
-    uri.length > 0 &&
-      setImageDetails({
-        author: uri[0].photographer_username,
-        title: uri[0].ai_description,
-        description: uri[0].photo_description,
-      });
+    setImgUrl(id.photo_img_url || id.secure_url)
+    setImageDetails({
+      author: id.photographer_username || id.owner,
+      title: id.ai_description || id.title,
+      description: id.photo_description || id.description,
+    });
   }, [id]);
 
   // const boxModal =useCallback((status)=>{
@@ -51,7 +48,7 @@ const ImageModal = ({ id, show, setShow }) => {
               >
                 ×
               </button>
-              <p>{id}</p>
+              <p>{id.photo_id || id.img_id}</p>
 
               <div className="w-full text-justify">
                 <p className="p-2 font-mono font-semibold">
