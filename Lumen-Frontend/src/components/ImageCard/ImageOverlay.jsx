@@ -1,7 +1,7 @@
 import React from "react";
 import ImageMenuButton from "./ImageMenuButton";
 
-const ImageOverlay = ({ createModal, setShowUri, data, handleLike, like }) => {
+const ImageOverlay = ({ createModal, setShowUri, data, handleLike, like, TextValues }) => {
   return (
     <div>
       {" "}
@@ -18,7 +18,7 @@ const ImageOverlay = ({ createModal, setShowUri, data, handleLike, like }) => {
             alt="logo"
             className="h-6 w-max object-contain px-2 p-0 mt-2 mr-auto "
           />
-          <ImageMenuButton TextValues={["Report Content", "Download"]} data={data} />
+          <ImageMenuButton TextValues={TextValues} data={data} />
         </div>
         <div className="w-full h-[60%] flex flex-col justify-center items-center">
           <button className="bg-transparent border border-transparent shadow-2xl rounded-3xl opacity-50 p-2 h-max w-max ">

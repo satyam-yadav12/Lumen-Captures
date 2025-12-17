@@ -131,7 +131,7 @@ const Register = () => {
               <span className="py-2 my-2">Upload Profile Picture</span>
               <input
                 name="ProfilePicture"
-                value={records.field}
+
                 onChange={(e) => handleFileChange(e)}
                 type="file"
                 className="rounded-sm w-full m-auto border p-2 mb-2  border-gray-200 outline-1 outline-[#00A2CA] dark:hover:outline-white hover:outline-[#00A2CA] focus:outline-[#00A2CA]"

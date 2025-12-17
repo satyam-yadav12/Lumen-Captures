@@ -15,7 +15,6 @@ const Collections = () => {
 
   useEffect(() => {
 
-
     const fetchLikedImages = (async () => {
       console.log(user, 'userstatus')
       if (!user) {

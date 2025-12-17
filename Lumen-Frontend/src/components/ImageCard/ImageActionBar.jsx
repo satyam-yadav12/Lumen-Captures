@@ -1,7 +1,7 @@
 import React from "react";
 import ImageMenuButton from "./ImageMenuButton";
 
-const ImageActionBar = ({ data, like, handleLike }) => {
+const ImageActionBar = ({ data, like, handleLike, TextValues }) => {
   return (
     <div className="h-12 p-2 block lg:hidden rounded-2xl">
       <div className="flex flex-row   ">
@@ -33,7 +33,7 @@ const ImageActionBar = ({ data, like, handleLike }) => {
             />
           )}
           <ImageMenuButton
-            TextValues={["Report Content", "Download", "View Source"]}
+            TextValues={TextValues}
           />
         </div>
       </div>

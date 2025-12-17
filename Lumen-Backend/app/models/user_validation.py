@@ -46,7 +46,7 @@ class user_registration_schema(Schema):
                 "Password and confirm password must match", field_name="ConfirmPassword"
             )
 
-        if data.get("Agree") is not True:
+        if data.get("Agree") and data.get("Agree") is not True:
             raise ValidationError(
                 "you must accept terms and condtion", field_name="Agree"
             )

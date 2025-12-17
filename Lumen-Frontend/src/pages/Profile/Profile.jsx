@@ -2,43 +2,37 @@ import { Button } from "@mui/material";
 import React, { useEffect, useContext, useState } from "react";
 import Uploads from "../Uploads";
 import UpdatePassword from "./UpdatePassword";
-import { getProfile } from "../../services/userContent-Profile";
+import { editProfile, getProfile, updateProfilePicture } from "../../services/userContent-Profile";
 import { AuthContext } from "../../context/AuthContext";
+import { AlertContext } from "../../context/AlertMessage";
 
-const Data = {
-  Full_name: "John Doe",
-  Username: "john_doe",
-  Email: "john.doe@example.com",
-  Mobile: "1234567890",
-  City: "New York",
-  Gender: "Male",
-  Agree: true, // Boolean value for agreement to terms
-  Profile_picture: "https://cdn-icons-png.flaticon.com/128/149/149071.png", // URL or file path
-  Last_login: "2025-11-18T05:00:00Z", // Timestamp
-  Contribution_count: 42, // Number of contributions
-};
 const Profile = () => {
+  const { setMessage } = useContext(AlertContext)
   const [disableEdit, setDisableEdit] = useState(true);
   const { logout } = useContext(AuthContext)
   const [profileData, setProfileData] = useState({
     Full_name: "",
     City: "",
-    Phone: "",
+
     Username: "",
     Email: "",
     Profile_picture: ""
   });
+  const [changePicture, setChangePicture] = useState(false)
+  const [storeFileToChange, setStoreFileToChange] = useState(null)
+
+
 
   useEffect(() => {
     let tempProfile = {
       Full_name: "",
       City: "",
-      Phone: "",
+
       Username: "",
       Email: "",
       Profile_picture: ""
     }
-    const fetchProfileData = (async () => {
+    const fetchProfileData = (async (tempProfile) => {
       const response = await getProfile()
       console.log(response)
       const responseField = response.data["user details"]
@@ -51,7 +45,7 @@ const Profile = () => {
       setProfileData(tempProfile)
     })
     try {
-      fetchProfileData()
+      fetchProfileData(tempProfile)
     }
     catch (error) {
       if (error.response.status === 401) {
@@ -71,9 +65,53 @@ const Profile = () => {
     setDisableEdit(false);
   };
 
-  const saveChanges = () => {
+  const saveChanges = (async () => {
+    if (!(profileData.Full_name && profileData.City)) {
+      setMessage("field must not empty")
+    }
+    const payload = {
+      Full_name: profileData.Full_name,
+      City: profileData.City,
+
+    }
+    console.log(payload)
+    try {
+      const response = await editProfile(payload)
+      console.log(response)
+      setMessage('success')
+    } catch (error) {
+      console.log(error)
+      setMessage("failed")
+    }
     setDisableEdit(true);
-  };
+  });
+
+  const handleFileUpload = (async (e) => {
+    const file = storeFileToChange
+    if (!file) {
+      return
+
+    };
+    const url = (URL.createObjectURL(file))
+    setProfileData((prev) => ({ ...prev, Profile_picture: url }));
+    setChangePicture(false)
+    const payload = new FormData()
+    payload.append("Profile_picture", storeFileToChange)
+
+    try {
+      const response = await updateProfilePicture(payload)
+      console.log(response)
+      setMessage("profile picture was changed")
+    } catch (error) {
+      console.log(error)
+      setMessage("request failed")
+    }
+  });
+
+  const handleFileChange = ((e) => {
+    e.target.files[0] ? setStoreFileToChange(e.target.files[0]) : setStoreFileToChange(null)
+  })
+
   return (
     <div>
       <div className="grid grid-cols-2 gap-2 w-full md:w-5/6 m-auto text-center my-7  border-b-2 border-gray-500 p-4">
@@ -100,12 +138,21 @@ const Profile = () => {
             className="h-40 mt-5 w-max rounded-full ml-auto  mb-auto inline select-none border border-gray-300"
             onClick={openPicture}
           />
-          <div className="w-max m-auto my-5">
-            <Button variant="outlined" color="primary">
-              Change
-            </Button>
-          </div>
+
+
+          {changePicture ?
+            (<div className="w-max my-5 flex flex-col">
+              <input type="file" onChange={(e) => handleFileChange(e)} className="border p-2 m-2 " />
+              <div className="z-50 m-auto w-max my-5  p-2 ">
+                <Button variant="outlined" onClick={handleFileUpload} >save</Button></div>
+            </div>) :
+            (<div className="w-max m-auto my-5">
+              <Button variant="outlined" color="primary" onClick={() => setChangePicture(true)}>
+                Change
+              </Button>
+            </div>)}
         </div>
+
         <div className=" text-left m-auto col-start-1 gap-0 w-full p-2 md:col-span-2">
           <div className="flex flex-col md:w-max md:m-auto md:justify-start ">
             <div className="flex-col md:flex-row flex gap-1 md:gap-5">
@@ -156,24 +203,6 @@ const Profile = () => {
               />
             </div>
 
-            <div className="flex-col md:flex-row flex gap-1 md:gap-5">
-              <span className="inline m-2 mr-auto text-2xl pt-2 text-gray-500 font-semibold ">
-                Mobile
-              </span>{" "}
-              <input
-                type="text"
-                value={profileData.Phone}
-                disabled={disableEdit}
-                onChange={(e) =>
-                  setProfileData((prev) => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }))
-                }
-                name="Mobile"
-                className="inline m-2 text-2xl font-semibold border p-2  pl-4"
-              />
-            </div>
           </div>
         </div>
         <div

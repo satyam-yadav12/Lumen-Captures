@@ -2,49 +2,91 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { AlertContext } from "../../context/AlertMessage"
+import { reportImageContent } from "../../services/Search_misc";
+import { deleteImage } from "../../services/userContent-Profile";
 
 export default function ImageMenuButton({ TextValues, data }) {
+  const { setMessage } = React.useContext(AlertContext)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [img, setImg] = React.useState("")
+  const [img_id, setImg_id] = React.useState("")
+
   const open = Boolean(anchorEl);
   const handleClose = () => {
     setAnchorEl(null);
   };
   React.useEffect(() => {
-    data && (data.photo_image_url || data.secure_url) && setImg(data.photo_image_url || data.secure_url)
+    if (data && (data.photo_image_url || data.secure_url)) {
+      setImg(data.photo_image_url || data.secure_url)
+      setImg_id(data.img_id)
+    }
 
   }, [data])
 
 
   const downloadImage = async (imageUrl, fileName) => {
+
     try {
-      // 1. Fetch the image data from the URL
       const response = await fetch(imageUrl);
       const blob = await response.blob();
 
-      // 2. Create a temporary local URL for the blob
+
       const url = window.URL.createObjectURL(blob);
 
-      // 3. Create a temporary anchor element and trigger the download
       const a = document.createElement('a');
-      a.style.display = 'none';
+
       a.href = url;
-      // Use the download attribute to suggest a file name
-      a.download = fileName || 'downloaded-image.jpg';
+      a.download = fileName || 'downloaded-image';
 
       document.body.appendChild(a);
-      a.click(); // Programmatically click the anchor to start the download
+      a.click();
       document.body.removeChild(a);
 
-      // 4. Clean up the temporary URL
-      window.URL.revokeObjectURL(url);
-      console.log('Image download initiated');
 
     } catch (error) {
-      console.error('Error downloading image:', error);
-      alert('Failed to download image. Check console for details.');
+      console.log('Error downloading image:', error);
+      window.open(imageUrl, '_blank');
+
     }
   }
+
+  const editImage = ((val) => {
+    console.log(val)
+    setMessage(val)
+  })
+  const deleteImagefromLumen = (async (id) => {
+    try {
+      const response = await deleteImage(id)
+
+      window.location.reload()
+      setMessage("image deleted")
+      console.log(response)
+    }
+    catch (error) {
+      console.log(error)
+      setMessage("request failed")
+    }
+
+  })
+  const reportImage = (async (id) => {
+    const payload = {
+      reason: "Image report detected (auto)"
+    }
+    try {
+      const response = await reportImageContent(id, payload)
+
+
+      console.log(response)
+      setMessage('Image sent for review')
+    }
+    catch (error) {
+      console.log(error)
+      setMessage("request failed")
+    }
+
+  })
+
   return (
     <div>
       <Button
@@ -86,7 +128,13 @@ export default function ImageMenuButton({ TextValues, data }) {
               }}
               key={index}
             >
-              {val == 'Download' ? <button onClick={() => downloadImage(img, "download")}>{val}</button> : val}            </MenuItem>
+
+
+              {val == 'Download' && <button className="cursor-pointer " onClick={() => downloadImage(img, "download")}>{val}</button>}
+              {val == 'Report Content' && <button className="cursor-pointer " onClick={() => reportImage(img_id)}>{val}</button>}
+              {val == 'Edit Image' && <button className="cursor-pointer " onClick={() => editImage(img_id)}>{val}</button>}
+              {val == 'Delete Image' && <button className="cursor-pointer " onClick={() => deleteImagefromLumen(img_id)}>{val}</button>}
+            </MenuItem>
           );
         })}
       </Menu>

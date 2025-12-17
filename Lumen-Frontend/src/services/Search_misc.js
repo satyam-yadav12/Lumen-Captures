@@ -36,7 +36,7 @@ export const fetchCollection = (async () => {
 
 export const postFeedback = (async (payload) => {
     try {
-        const response = await axiosApi.post("/feedback", payload)
+        const response = await axiosApi.post("misc/feedback", payload)
         return response.data
     }
     catch (error) {
@@ -45,9 +45,9 @@ export const postFeedback = (async (payload) => {
 })
 
 
-export const reportImageContent = (async (img_id) => {
+export const reportImageContent = (async (img_id, payload) => {
     try {
-        const response = await axiosApi.post(`/reportcontent/${img_id}`)
+        const response = await axiosApi.post(`misc/reportcontent/${img_id}`, payload)
         return response.data
     }
     catch (error) {

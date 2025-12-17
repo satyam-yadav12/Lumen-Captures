@@ -28,7 +28,7 @@ const Uploads = () => {
         Image uploaded by {"Username"}
       </h1>
       <div className="pt-5 w-[98%] m-auto">
-        {imageData ? <Image images={imageData} /> : "loading..."}
+        {imageData ? <Image images={imageData} TextValues={['Edit Image', 'Delete Image']} /> : "loading..."}
 
       </div>
     </div>

@@ -14,7 +14,7 @@ def get_profile():
     id = get_jwt_identity()
     user_details = search_by_email(id)
     filtered_user_data = filter_userdata(user_details, ["Password", "Agree"])
-    return jsonify({"user details": filtered_user_data, "response_code": 201}), 201
+    return jsonify({"user details": filtered_user_data, "response_code": 201}), 200
 
 
 # route("editprofile", methods=["PUT", "PATCH"])
@@ -29,10 +29,10 @@ def edit_profile():
         if validate_data:
             update_user_data(id, data)
 
-        return jsonify({"msg": "profile update successfully"}), 201
+        return jsonify({"msg": "profile update successfully"}), 200
 
     except ValidationError as err:
-        return jsonify({"error": err.messages})
+        return jsonify({"error": err.messages}), 400
     except ValueError as e:
         return jsonify({"error": str(e)}), 401
 
@@ -58,7 +58,7 @@ def edit_password():
     except ValueError as e:
         return jsonify({"error": str(e)}), 401
     except ValidationError as err:
-        return jsonify({"error": err.messages})
+        return jsonify({"error": err.messages}), 400
 
 
 # route("change-profile-picture", methods=["PUT", "PATCH"])
@@ -66,7 +66,12 @@ def edit_password():
 
 def change_profile_picture():
     id = get_jwt_identity()
-    img = request.files["Profile_picture"]
+
+    try:
+        img = request.files["Profile_picture"]
+    except Exception as e:
+        return jsonify({"error": "file not received"}), 400
+
     try:
         user_details = search_by_email(id)
         username = user_details["Username"]
@@ -83,7 +88,7 @@ def change_profile_picture():
                     "secure_url": update_param,
                 }
             ),
-            201,
+            200,
         )
     except ValueError as e:
         return jsonify({"error": str(e)}), 400

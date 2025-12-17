@@ -11,7 +11,7 @@ import { AuthContext } from "../../context/AuthContext"
 import { useNavigate } from "react-router-dom"
 import { AlertContext } from "../../context/AlertMessage";
 
-const Image = ({ images = mock_images }) => {
+const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download'] }) => {
   const { user, logout } = useContext(AuthContext)
   const { setMessage } = useContext(AlertContext)
   const navigate = useNavigate()
@@ -199,9 +199,10 @@ const Image = ({ images = mock_images }) => {
               data={data}
               handleLike={handleLike}
               like={like}
+              TextValues={TextValues}
             />
 
-            <ImageActionBar data={data} like={like} handleLike={handleLike} />
+            <ImageActionBar data={data} like={like} handleLike={handleLike} TextValues={TextValues} />
           </div>
         );
       })}

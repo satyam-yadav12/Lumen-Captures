@@ -15,7 +15,7 @@ export const getProfile = (async () => {
 
 export const editProfile = (async (payload) => {
     try {
-        const result = await axiosApi.put("/user/edit-profile", payload)
+        const result = await axiosApi.put("/user/editprofile", payload)
         return result
     } catch (error) {
         throw error
@@ -25,7 +25,7 @@ export const editProfile = (async (payload) => {
 
 export const updatePassword = (async (payload) => {
     try {
-        const response = await axiosApi.put("/user/update-password", payload)
+        const response = await axiosApi.put("/user/changepassword", payload)
         return response.data
     }
     catch (error) {
@@ -36,7 +36,7 @@ export const updatePassword = (async (payload) => {
 
 export const updateProfilePicture = (async (payload) => {
     try {
-        const response = await axiosApi.put("/user/update-profile-picture", payload)
+        const response = await axiosApi.put("/user/change-profile-picture", payload)
         return response.data
     }
     catch (error) {
@@ -67,7 +67,7 @@ export const UploadImageToLumen = (async (payload) => {
 
 export const deleteImage = (async (img_id) => {
     try {
-        const response = await axiosApi.delete(`/user/delete_img/${img_id}`)
+        const response = await axiosApi.delete(`/user/uploads/${img_id}/delete`)
         return response.data
     }
     catch (error) {
@@ -78,7 +78,7 @@ export const deleteImage = (async (img_id) => {
 
 export const updateImage = (async (img_id, payload) => {
     try {
-        const response = await axiosApi.put(`/user/update_img/${img_id}`, payload)
+        const response = await axiosApi.put(`/user/uploads/${img_id}/update`, payload)
         return response.data
     }
     catch (error) {

@@ -11,7 +11,7 @@ const ImageModal = ({ id, show, setShow }) => {
   });
 
   useEffect(() => {
-    setImgUrl(id.photo_img_url || id.secure_url)
+    setImgUrl(id.photo_image_url || id.secure_url)
     setImageDetails({
       author: id.photographer_username || id.owner,
       title: id.ai_description || id.title,
