@@ -10,6 +10,7 @@ from ..utils.db import (
     update_image_details_in_db,
     search_for_user_uploads,
     delete_image_details,
+    delete_all_image_likes,
 )
 
 
@@ -35,10 +36,12 @@ def upload_new_img():
             if img_id:
                 cloudinary_response = upload_user_images(img, img_id, username)
                 Uri, folder = cloudinary_response["Url"], cloudinary_response["folder"]
+                img_height = cloudinary_response["img_height"]
+                img_width = cloudinary_response["img_width"]
 
             if Uri and folder:
                 img_collection_data = create_img_data_to_upload(
-                    img_data, Uri, folder, username, img_id
+                    img_data, Uri, folder, username, img_id, img_height, img_width
                 )
 
             if img_collection_data:
@@ -47,17 +50,25 @@ def upload_new_img():
             return (
                 jsonify(
                     {
-                        "msg": "image uploaded successfull",
-                        "insert_id": insert_id,
+                        "msg": "image upload successfull",
                         "image_id": img_id,
+                        "result": cloudinary_response,
                     }
                 ),
-                200,
+                201,
             )
     except Exception as e:
         if Uri != "":
             delete_user_img(img_id)
-        return jsonify({"unexpected error occured": str(e)}), 400
+        return (
+            jsonify(
+                {
+                    "unexpected error occured": str(e),
+                    "result": cloudinary_response,
+                }
+            ),
+            400,
+        )
 
 
 # route("/uploads", methods=["GET"])
@@ -94,4 +105,5 @@ def delete_user_img(id):
     user = get_jwt()["username"]
     delete_cloudinary_img_by_user(id, user, "user_uploaded_img")
     delete_image_details(id)
+    delete_all_image_likes(id)
     return jsonify({"msg": "image deleted successfull"}), 200

@@ -94,6 +94,26 @@ def find_search_results_tags(keyword, skip, limit):
     return result
 
 
+# updated search on index
+def find_text_search_result(keyword, skip, limit):
+    results = (
+        mongo.db.user_imgs.find(
+            {"$text": {"$search": keyword}}, {"score": {"$meta": "textScore"}}
+        )
+        .sort([("score", {"$meta": "textScore"})])
+        .skip(skip)
+        .limit(limit)
+    )
+
+    return results
+
+
+def find_total_count_of_text_results(keyword):
+    result = mongo.db.user_imgs.count_documents({"$text": {"$search": keyword}})
+    return result
+
+
+# use index based text search
 def find_total_count_of_results_title(keyword):
     result = mongo.db.user_imgs.count_documents(
         {"title": {"$regex": keyword, "$options": "i"}}
@@ -126,8 +146,29 @@ def delete_collection_data(user, img):
 
 
 def search_collection_of_user(user):
-    data = mongo.db.user_collection.find({"username": user})
-    return data
+    response = mongo.db.user_imgs.aggregate(
+        [
+            {
+                "$lookup": {
+                    "from": "user_collection",
+                    "localField": "img_id",
+                    "foreignField": "img_id",
+                    "as": "user",
+                }
+            },
+            {"$unwind": "$user"},
+            {"$match": {"user.username": user}},
+        ]
+    )
+    data = mongo.db.user_collection.find(
+        {"username": user}
+    )  # remove if above code works
+    return response
+
+
+def delete_all_image_likes(id):
+    result = mongo.db.user_collection.delete_many({"img_id": id})
+    return result
 
 
 def check_if_like_exist(id, user):

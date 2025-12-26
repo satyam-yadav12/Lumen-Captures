@@ -11,7 +11,7 @@ import { AuthContext } from "../../context/AuthContext"
 import { LogoutFromLumen } from "../../services/authApi";
 
 const DrawerContent = ({ user, isActive, toggleDrawer, changeActive }) => {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const { user: name, setUser } = useContext(AuthContext)
 
   const handleLogOut = (async () => {
@@ -63,11 +63,7 @@ const DrawerContent = ({ user, isActive, toggleDrawer, changeActive }) => {
           <Divider />
         </div>
         <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary={"Change Theme"} onClick={toggleTheme} />
-            </ListItemButton>
-          </ListItem>
+
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemText primary={<button onClick={handleLogOut}>Log Out</button>} />

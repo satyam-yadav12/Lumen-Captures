@@ -12,6 +12,7 @@ import Developer from "../pages/Developer";
 import Contact from "../pages/Contact";
 import Layout from "../components/Layout/Layout";
 import Test from "../pages/Test";
+import Explore from "../pages/Explore";
 
 
 const PageRoutes = () => {
@@ -29,6 +30,7 @@ const PageRoutes = () => {
           <Route path="contact" element={<Contact />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="explore/:query/:page" element={<Explore />} />
           <Route path="test" element={<Test />} />
           <Route path="*" element={"Not found"} />
         </Route>

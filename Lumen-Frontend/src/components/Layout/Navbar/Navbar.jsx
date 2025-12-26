@@ -10,6 +10,7 @@ import DrawerContent from "../DrawerContent";
 import { AuthContext } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { CheckActiveSession } from "../../../services/authApi";
+import ThemeSwitch from "../../ThemeSwitch";
 
 const Navbar = () => {
   const { user, } = useContext(AuthContext)
@@ -28,8 +29,6 @@ const Navbar = () => {
 
 
 
-
-
   return (
     <div>
       <div className="grid grid-cols-2 md:grid-cols-4  gap-4 mt-2  items-center">
@@ -40,31 +39,28 @@ const Navbar = () => {
           <SearchBar />
         </div>
         <div className="justify-self-end col-start-2 md:col-start-4 m-3 p-3 font-bold cursor-pointer ">
-          {user ? (
-            <MenuIcon
-              onClick={toggleDrawer(true)}
-              className="mr-5"
-              color="primary"
-              fontSize="large"
-            />
-          ) : (
-            <div className="flex flex-row gap-2">
-              <Button
-                onClick={toggleTheme}
-                className="inline "
-                variant="outlined"
-              >
-                {mode}
-              </Button>
+          <div className="flex flex-row gap-2">
+
+            <ThemeSwitch changeTheme={toggleTheme} />
+            {user ? (
+              <MenuIcon
+                onClick={toggleDrawer(true)}
+                className="mr-5"
+                color="primary"
+                fontSize="large"
+              />
+            ) : (
+
               <Button
                 onClick={() => navigate('/login')}
                 className="inline"
-                variant="outlined"
+                variant="contained"
               >
                 Login
               </Button>
-            </div>
-          )}
+
+            )}
+          </div>
           <div
             className={
               mode == "dark" ? "bg-black text-white" : "bg-white text-black"

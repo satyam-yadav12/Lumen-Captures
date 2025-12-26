@@ -109,28 +109,32 @@ const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download
         console.log(tempLikes, 'temp')
         setLike(tempLikes)
       } catch (error) {
-        if (response.data.status && response.data.status === 401) {
+        console.log(error, "error1")
+        if (error.response.status && error.response.status === 401) {
 
           logout()
 
         }
+
       }
 
     })
     fetchLikedImages()
-  }, [user])
+  }, [user, photos])
   const sendLikeToLumen = (async (img_id) => {
     try {
       const response = await saveToCollection(img_id)
       console.log(response)
       setMessage(`like sent`)
     } catch (error) {
-      if (response.data.status && response.data.status === 401) {
+      console.log(error, "error")
+      if (error.response.status && error.response.status === 401) {
 
         logout()
         navigate('/login')
       }
-      console.log(error)
+
+
     }
   })
   const removeLikeFromLumen = (async (img_id) => {
@@ -139,7 +143,8 @@ const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download
       console.log(response)
       setMessage(`dislike sent`)
     } catch (error) {
-      if (response.data.status && response.data.status === 401) {
+      console.log(error)
+      if (error.status && error.status === 401) {
 
         logout()
         navigate('/login')

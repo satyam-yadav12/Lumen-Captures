@@ -3,14 +3,14 @@ import ImageMenuButton from "./ImageMenuButton";
 
 const ImageOverlay = ({ createModal, setShowUri, data, handleLike, like, TextValues }) => {
   return (
-    <div>
+    <div >
       {" "}
       <div
         onClick={() => {
           createModal(true);
           setShowUri(data);
         }}
-        className=" hidden  md:flex md:flex-col justify-evenly w-full h-full p-2 text-2xl text-bold text-white font-bold shadow-lg rounded-2xl shadow-black opacity-0 inset-0 group-hover:opacity-100 transition-opacity ease duration-300 text-center top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 absolute "
+        className=" hidden  md:flex md:flex-col justify-evenly w-full h-full p-2 text-2xl text-bold text-white font-bold shadow-lg rounded-2xl shadow-black opacity-0 inset-0 group-hover:opacity-100 transition-opacity ease duration-300 text-center top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 absolute lg:bg-black/20"
       >
         <div className="flex flex-row h-[20%] p-2 mb-auto">
           <img
@@ -26,7 +26,7 @@ const ImageOverlay = ({ createModal, setShowUri, data, handleLike, like, TextVal
           </button>
         </div>
         <div className="flex flex-row h-[20%] p-2 ">
-          <p className="h-full w-max  px-2 mr-auto">
+          <p className="h-full w-max  px-2 mr-auto shadow-2xl">
             {data.photographer_username || data.owner}
           </p>
 
@@ -34,7 +34,7 @@ const ImageOverlay = ({ createModal, setShowUri, data, handleLike, like, TextVal
             <img
               src="https://img.icons8.com/?size=64&id=aId5rVASLwDE&format=png"
               alt="like"
-              className="ml-auto px-2 mt-2 h-6 invert  object-contain  w-max "
+              className="ml-auto px-2 mt-2 h-6 invert  object-contain  w-max shadow-2xl"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -45,7 +45,7 @@ const ImageOverlay = ({ createModal, setShowUri, data, handleLike, like, TextVal
             <img
               src="https://cdn-icons-png.flaticon.com/128/25/25424.png"
               alt="like"
-              className="ml-auto px-2 mt-2 h-6 invert  object-contain  w-max "
+              className="ml-auto px-2 mt-2 h-6 invert  object-contain  w-max shadow-2xl "
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();

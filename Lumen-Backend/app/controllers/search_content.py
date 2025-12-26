@@ -1,10 +1,8 @@
 from flask import jsonify, request
 from ..utils.db import (
-    find_search_results_title,
-    find_search_results_tags,
-    find_total_count_of_results_title,
-    find_total_count_of_results_tag,
     find_all_images,
+    find_text_search_result,
+    find_total_count_of_text_results,
 )
 
 
@@ -19,20 +17,17 @@ def search_keyword():
 
     skip = (page - 1) * limit
 
-    title_results = find_search_results_title(keyword, skip, limit)
-    tag_results = find_search_results_tags(keyword, skip, limit)
+    text_search_result = find_text_search_result(
+        keyword, skip, limit
+    )  # use text search
 
-    title_results = list(title_results)
-    tag_results = list(tag_results)
+    text_results = list(text_search_result)  # text search
 
-    total_title = find_total_count_of_results_title(keyword)
-    total_tag = find_total_count_of_results_tag(keyword)
+    total_results = find_total_count_of_text_results(keyword)  # text search
 
     response = {
-        "title_result": title_results,
-        "tag_result": tag_results,
-        "total_title": total_title,
-        "total_tag": total_tag,
+        "search_result": text_results,
+        "total_results": total_results,
         "keyword": keyword,
     }
 

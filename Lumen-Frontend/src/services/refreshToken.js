@@ -8,7 +8,6 @@ const axiosApi = axios.create({
 const PUBLIC_ROUTES = [
     "/login",
     "/register",
-    "/refresh/action",
 
     "/lumen/search"
 ];
@@ -29,18 +28,18 @@ const processQueue = (error, data = null) => {
 };
 
 axiosApi.interceptors.response.use(
-    (response) => response,
-
+    res => res,
     async (error) => {
+        if (!error.response) return Promise.reject(error);
+
         const originalRequest = error.config;
 
         if (isPublicRoute(originalRequest.url)) {
             return Promise.reject(error);
         }
-        // If access token expired (401 unauthorized)
-        if (error.response?.status === 401 && !originalRequest._retry) {
 
-            // If a refresh is already happening → queue this request
+        if (error.response.status === 401 && !originalRequest._retry) {
+
             if (isRefreshing) {
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
@@ -51,28 +50,18 @@ axiosApi.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                // 🔥 Silent call to refresh endpoint
-                await axios.post(
-                    "http://localhost:5000/refresh/action",
-                    {},
-                    { withCredentials: true }
-                );
-
+                await axiosApi.post("/refresh/action");
                 processQueue(null);
-
-                // 🔥 Retry original failed request
                 return axiosApi(originalRequest);
 
-            } catch (refreshError) {
-                processQueue(refreshError, null);
+            } catch (err) {
+                processQueue(err);
 
-                // 🔥 If refresh token also expired → logout
-                if (!originalRequest.allowUnauth) {
-                    window.location.href = "/login"
+                if (!originalRequest.meta?.allowUnauth) {
+                    window.location.href = "/login";
                 }
 
-
-                return Promise.reject(refreshError);
+                return Promise.reject(err);
 
             } finally {
                 isRefreshing = false;

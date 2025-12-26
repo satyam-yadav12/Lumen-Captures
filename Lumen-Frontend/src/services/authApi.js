@@ -33,7 +33,7 @@ export const LogoutFromLumen = (async () => {
 
 export const CheckActiveSession = (async () => {
     return await axiosApi.get("/me", {
-        allowUnauth: true
-    })
+        meta: { allowUnauth: true }
+    });
 })
 

@@ -99,11 +99,8 @@ export default function ImageMenuButton({ TextValues, data }) {
           setAnchorEl(e.currentTarget);
         }}
       >
-        <img
-          src="https://cdn-icons-png.flaticon.com/128/3917/3917764.png"
-          alt="Menu"
-          className="h-6 w-max object-contain pr-1 pl-3 mb-1 pb-1 dark:invert"
-        />
+        <img className="h-6 w-max object-contain pr-1 pl-3 mb-1 pb-1 dark:invert lg:invert shadow-2xl" src="https://cdn-icons-png.flaticon.com/128/3917/3917764.png" alt="menu" />
+
       </Button>
       <Menu
         id="basic-menu"

@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
+  const [searchInput, setSearchInput] = useState("")
+  const navigate = useNavigate()
   const SearchKeyword = () => {
-    console.log("search hit");
+    navigate(`/explore/${searchInput}/1`)
   };
   return (
     <div className="w-full flex flex-col justify-start m-auto">
@@ -10,6 +13,8 @@ const SearchBar = () => {
         <input
           type="text"
           name="Search"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search Image Tag/Title"
           className="border inline border-gray-400 border-r-0 p-4  rounded-r-none rounded-3xl mx-0 md:mt-2 bg-gray-100 h-[50px] text-black focus:outline-0 w-[90%]"
         />
@@ -20,33 +25,7 @@ const SearchBar = () => {
           onClick={SearchKeyword}
         />
       </div>
-      <div className="mt-1">
-        <label
-          htmlFor="source"
-          className="mx-2  font-extralight  font-sans text-sm"
-        >
-          <input
-            type="checkbox"
-            name="source"
-            id="source"
-            className="p-2 cursor-pointer md:pl-0 md:ml-0"
-            defaultChecked
-          />{" "}
-          Search Lumen Dataset
-        </label>
-        <label
-          htmlFor="user"
-          className="mx-2  font-extralight  font-sans text-sm"
-        >
-          <input
-            type="checkbox"
-            name="user"
-            id="user"
-            className="p-2 cursor-pointer"
-          />{" "}
-          Search User
-        </label>
-      </div>
+
     </div>
   );
 };

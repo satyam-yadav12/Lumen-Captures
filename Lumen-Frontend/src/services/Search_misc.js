@@ -61,7 +61,7 @@ export const reportImageContent = (async (img_id, payload) => {
 
 export const SearchKeyword = (async (keyword, page = 1) => {
     try {
-        const response = await axiosApi.get(`/lumen/search?q=${keyword}&p=${page}`)
+        const response = await axiosApi.get(`/lumen/search?q=${keyword}&page=${page}`)
         return response.data
     }
     catch (error) {

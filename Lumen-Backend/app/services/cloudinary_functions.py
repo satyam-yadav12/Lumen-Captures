@@ -36,6 +36,9 @@ def upload_user_images(img, public_name, user):
         "msg": "image uploaded successfully",
         "Url": upload_results["secure_url"],
         "folder": f"user_uploaded_img/{user}",
+        "result": upload_results,
+        "img_height": upload_results["height"],
+        "img_width": upload_results["width"],
         "response_code": 201,
     }
 

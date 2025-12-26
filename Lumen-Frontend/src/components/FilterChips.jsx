@@ -1,7 +1,7 @@
 import { Chip } from "@mui/material";
 import React, { useState } from "react";
 
-const FilterChips = ({ data = ["hello", "apply", "some", "filter"] }) => {
+const FilterChips = ({ data = ["Lumen Captures"] }) => {
   const [variant, setVariant] = useState("outlined");
 
   const filterApply = (e) => setVariant(e.target.id);

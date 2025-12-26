@@ -1,5 +1,5 @@
-import { Button } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import { Button, CircularProgress } from "@mui/material";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { UploadImageToLumen } from "../services/userContent-Profile";
 import { AlertContext } from "../context/AlertMessage";
@@ -11,6 +11,7 @@ const UploadImage = () => {
   const [imageDetails, setImageDetails] = useState({ title: "", description: "", tags: [] })
   const [payloadImage, setPayloadImage] = useState(null)
   const [disableSubmit, setDisableSubmit] = useState(false)
+  const imageFieldRef = useRef(null)
 
   const handleFile = (e) => {
     const file = e.target.files[0];
@@ -39,10 +40,16 @@ const UploadImage = () => {
 
     }
     setImageDetails({ title: "", description: "", tags: [] })
+    if (imageFieldRef.current) {
+      imageFieldRef.current.value = null
+      setImagePreview("")
+    }
     return message
   })
   const handleSubmit = (async (e) => {
     e.preventDefault()
+    if (disableSubmit) return;
+
     setDisableSubmit(() => true)
     let payload = new FormData()
     for (const key in imageDetails) {
@@ -109,6 +116,7 @@ const UploadImage = () => {
           type="file"
           name="file"
           id="file"
+          ref={imageFieldRef}
           onChange={handleFile}
           accept="image/*"
         />
@@ -143,7 +151,7 @@ const UploadImage = () => {
         </div>
       </div>
       <div className="m-auto my-4 col-span-2">
-        <Button variant="contained" disable={disableSubmit} onClick={(e) => handleSubmit(e)}>Upload Image</Button>
+        <Button variant="contained" disabled={disableSubmit} onClick={(e) => handleSubmit(e)}>Upload Image{disableSubmit ? <CircularProgress size={10} /> : ""}</Button>
       </div>
     </div>
   );

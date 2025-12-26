@@ -71,7 +71,7 @@ def generate_token_by_google_info(data):
         mongo.db.jti_validation.insert_one({"jti": jti, "valid": True})
 
         # resp = jsonify({'msg': 'login successful', 'user name': user_details['Username'], "access_toke": access_token, "refresh_token": refresh_token, "jti": jti, "jti id": jti_id})
-        redirect_uri = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
+        redirect_uri = os.getenv("FRONTEND_ORIGIN")
         resp = make_response(
             f"""
             <html>

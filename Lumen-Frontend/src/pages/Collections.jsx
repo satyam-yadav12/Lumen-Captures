@@ -10,58 +10,34 @@ const Collections = () => {
   const { user, logout } = useContext(AuthContext)
   const { setMessage } = useContext(AlertContext)
   const navigate = useNavigate()
-  const [like, setLike] = useState([]);
+
   const [likedPhotos, setLikedPhotos] = useState([])
 
+
+
   useEffect(() => {
-
     const fetchLikedImages = (async () => {
-      console.log(user, 'userstatus')
       if (!user) {
-        setLike([])
-        return;
+        return
       }
-
       try {
+
         const response = await fetchCollection()
         console.log(response, 'likes')
-        let tempLikes = []
-        response['collection'].map((val, index) => {
-          tempLikes.push(val.img_id)
-        })
-        console.log(tempLikes, 'temp')
-        setLike(tempLikes)
-      } catch (error) {
-        if (error.response.status && error.response.status === 401) {
-
-          logout()
-          navigate('/login')
-        }
-      }
-
-    })
-    fetchLikedImages()
-  }, [user])
-
-  useEffect(() => {
-    const filterLIkedImages = (async () => {
-      try {
-        const response = await fetchAllImages()
-        let imageData = response['result'].filter((val) => like.includes(val.img_id))
-
-        setLikedPhotos(imageData)
+        setLikedPhotos(response.collection)
         setMessage('liked image was fetched')
       } catch (error) {
         if (error.data.status && error.data.status === 401) {
 
           logout()
+          navigate('/login')
 
         }
       }
     })
 
-    filterLIkedImages()
-  }, [like])
+    fetchLikedImages()
+  }, [user])
 
 
   return (

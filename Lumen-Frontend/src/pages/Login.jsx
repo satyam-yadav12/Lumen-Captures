@@ -1,9 +1,10 @@
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginWithLumen } from "../services/authApi";
 import { AuthContext } from "../context/AuthContext";
 import { AlertContext } from "../context/AlertMessage";
+import GoogleLoginButton from "../components/googleLoginButton";
 // import { AlertContext } from "../context/AlertMessage";
 
 const Login = () => {
@@ -12,10 +13,10 @@ const Login = () => {
   const { user, setUser, logout } = useContext(AuthContext)
   const { message, setMessage } = useContext(AlertContext)
   const [formData, setFormData] = useState({ Email: "", Password: "" })
-const [disableSubmit, setDisableSubmit] = useState(false)
+  const [disableSubmit, setDisableSubmit] = useState(false)
 
   const handleLogin = (async () => {
-    setDisableSubmit(()=>true)
+    setDisableSubmit(() => true)
     user && logout();
     try {
       if (formData['Email'] != "" && formData['Password'] != "") {
@@ -23,7 +24,7 @@ const [disableSubmit, setDisableSubmit] = useState(false)
         console.log(result['user name'])
         setUser(result['user name'])
         setMessage(`Welcome ${result['user name']}!`)
-        setDisableSubmit(()=>false)
+        setDisableSubmit(() => false)
         navigate('/')
       }
     } catch (error) {
@@ -34,14 +35,14 @@ const [disableSubmit, setDisableSubmit] = useState(false)
 
 
     setFormData({ Email: "", Password: "" })
-    setDisableSubmit(()=>false)
-    
+    setDisableSubmit(() => false)
+
   });
   return (
     <>
       {/* <Notification message={message} setMessage={changeNotification} /> */}
       <div className="relative w-full  overflow-hidden">
-        <div className="flex flex-row w-screen h-[80vh] overflow-hidden">
+        <div className="flex flex-row w-screen h-[100vh] overflow-hidden">
           <div className="bg-white dark:bg-gray-300 w-full"></div>
           <div className="bg-[#00A2CA] dark:bg-[#3d3d56] w-full"></div>
         </div>
@@ -78,8 +79,8 @@ const [disableSubmit, setDisableSubmit] = useState(false)
               </label>
             </div>
             <div className="flex flex-col justify-center bg-[#00A2CA] dark:bg-white  dark:text-black text-white rounded-sm my-2  font-semibold">
-              <Button onClick={handleLogin} color="inherit" disable={disableSubmit}>
-                Login
+              <Button onClick={handleLogin} color="inherit" disabled={disableSubmit}>
+                Login{disableSubmit ? <CircularProgress size={10} /> : ""}
               </Button>
             </div>
             <p className="font-light text-center ">
@@ -89,6 +90,10 @@ const [disableSubmit, setDisableSubmit] = useState(false)
               </Link>{" "}
               here
             </p>
+            <div className=" flex flex-row justify-center items-center m-2 mt-4">
+              <GoogleLoginButton />
+            </div>
+
           </div>
           <div className=" hidden md:block col-start-4 bg-[url(/common.svg.png)] bg-no-repeat bg-center bg-cover ml-auto px-4 w-full "></div>
         </div>
