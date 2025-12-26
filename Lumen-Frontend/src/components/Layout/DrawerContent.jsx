@@ -10,7 +10,7 @@ import { ThemeContext } from "../../context/Themecontext";
 import { AuthContext } from "../../context/AuthContext"
 import { LogoutFromLumen } from "../../services/authApi";
 
-const DrawerContent = ({ user, isActive, toggleDrawer, changeActive }) => {
+const DrawerContent = ({ isActive, toggleDrawer }) => {
   const { theme } = useContext(ThemeContext);
   const { user: name, setUser } = useContext(AuthContext)
 
@@ -36,7 +36,7 @@ const DrawerContent = ({ user, isActive, toggleDrawer, changeActive }) => {
               }`}
             onClick={toggleDrawer(false)}
           >
-            X
+            ×
           </span>
         </div>
         <List>

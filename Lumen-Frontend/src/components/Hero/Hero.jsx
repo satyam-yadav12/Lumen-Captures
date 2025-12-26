@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 const Hero = () => {
-  const [tag, setTag] = useState("Discover, search, and share images");
+  const [tag, setTag] = useState("Discover, search community shared images");
   const { user } = useContext(AuthContext)
   const navigate = useNavigate();
 
@@ -16,9 +16,9 @@ const Hero = () => {
 
   const updateTag = () =>
     setTag(
-      tag == "Discover, search, and share images"
+      tag == "Discover, search community shared images"
         ? "Upload your images for everyone to see"
-        : "Discover, search, and share images"
+        : "Discover, search community shared images"
     );
 
   useEffect(() => {

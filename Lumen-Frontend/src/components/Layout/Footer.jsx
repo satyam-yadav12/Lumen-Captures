@@ -57,7 +57,7 @@ const Footer = () => {
           </div>
           {/* links */}
           <div className="flex flex-row md:flex-col md:row-start-1 md:col-start-3 row-start-2 justify-start text-left ml-5 pt-2 p-2 mr-auto">
-            {["Feedback", "Developer", "Contact"].map((text) => {
+            {["Feedback", "Developer", "About"].map((text) => {
               return (
                 <Fragment key={text}>
                   <Link to={"/" + text.toLowerCase()}>
