@@ -1,20 +1,26 @@
-//  darkMode: "class", // 👈 IMPORTANT
+
 import { createContext, useEffect, useState } from "react";
 
 export const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
   const [Imgtag, setImgtag] = useState("hero");
 
+
   useEffect(() => {
-    
+
     if (theme === "dark") {
+      localStorage.setItem("theme", "dark")
+
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light")
     }
   }, [theme]);
+
+
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
@@ -25,7 +31,7 @@ export function ThemeProvider({ children }) {
   }, [theme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, Imgtag }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, Imgtag, isDarkMode: theme === "dark" }}>
       {children}
     </ThemeContext.Provider>
   );

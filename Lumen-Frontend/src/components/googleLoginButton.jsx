@@ -10,19 +10,23 @@ const GoogleLoginButton = () => {
             setMessage("already logged in with an account")
             return
         }
+        let message;
         try {
             window.location.href = "http://localhost:5000/google/login";
-            setMessage("login success")
+            message = "Redirecting to google login"
         }
         catch (error) {
             console.log(error)
-            setMessage("request failed")
+            message = 'login failed'
+        }
+        finally {
+            setMessage(message)
         }
     })
 
 
     return (
-        <div className=" bg-white text-black flex flex-row justify-center items-center p-1 px-3 ml-1 text-center cursor-pointer h-15 border-black border rounded-lg w-max " onClick={loginWithGoogle}><img src="https://cdn-icons-png.flaticon.com/128/300/300221.png" className="h-12 w-12 p-3 px-0.5 inline" />Continue with Google</div>
+        <div className=" bg-white text-black flex flex-row justify-center items-center p-1 px-3 ml-1 text-center cursor-pointer h-max md:h-15 border-black border rounded-lg w-max " onClick={loginWithGoogle}><img src="https://cdn-icons-png.flaticon.com/128/300/300221.png" className="h-13 mr-3 p-3 px-0.5 inline " />Continue with Google</div>
     )
 }
 

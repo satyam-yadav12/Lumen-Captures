@@ -41,7 +41,7 @@ const Navbar = () => {
         <div className="justify-self-end col-start-2 md:col-start-4 m-3 p-3 font-bold cursor-pointer ">
           <div className="flex flex-row gap-2">
 
-            <ThemeSwitch changeTheme={toggleTheme} />
+            <ThemeSwitch />
             {user ? (
               <MenuIcon
                 onClick={toggleDrawer(true)}

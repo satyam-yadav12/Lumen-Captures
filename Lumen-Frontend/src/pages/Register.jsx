@@ -143,7 +143,7 @@ const Register = () => {
             </label>
           </div>
           <div className="row-start-8 md:col-span-2 md:row-start-5 ">
-            <input type="checkbox" name="Agree" value={records.Agree} onChange={(e) => setRecords((prev) => ({ ...prev, [e.target.name]: !prev.Agree }))} /><span>Agree with Terms&Condition</span>
+            <input type="checkbox" name="Agree" value={records.Agree} onChange={(e) => setRecords((prev) => ({ ...prev, [e.target.name]: !prev.Agree }))} className="m-2  p-1" /><span >Agree with <a href="/terms" className="text-blue-600 underline">Terms & Conditions</a></span>
           </div>
           <div className="flex flex-col justify-center md:col-span-2 w-full p-1 m-auto text-center row-start-9 md:row-start-6 bg-[#00A2CA] dark:bg-white dark:text-black  rounded-sm my-2 text-white font-semibold">
             <Button onClick={e => handleRegister(e)} color="inherit" disabled={disableSubmit}>

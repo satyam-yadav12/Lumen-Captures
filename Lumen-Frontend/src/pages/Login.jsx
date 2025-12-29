@@ -42,14 +42,14 @@ const Login = () => {
     <>
       {/* <Notification message={message} setMessage={changeNotification} /> */}
       <div className="relative w-full  overflow-hidden">
-        <div className="flex flex-row w-screen h-[100vh] overflow-hidden">
+        <div className="flex flex-row w-screen h-screen overflow-hidden">
           <div className="bg-white dark:bg-gray-300 w-full"></div>
           <div className="bg-[#00A2CA] dark:bg-[#3d3d56] w-full"></div>
         </div>
         <div className="top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 absolute grid grid-cols-1 md:grid-cols-4 text-left gap-6 w-screen">
           <div className="hidden md:block col-start-1 bg-[url(/theme-3.svg.png)] bg-no-repeat bg-center bg-contain mx-4 px-4 w-full "></div>
           {/* Login form */}
-          <div className="w-5/6 m-auto p-10 bg-white dark:bg-[#222224] h-full border border-white shadow-black drop-shadow-2xl  rounded-3xl col-start-1 md:col-span-2 md:col-start-2 flex flex-col justify-start ">
+          <div className="lg:w-5/6 m-auto p-10 bg-white dark:bg-[#222224] h-full border border-white shadow-black drop-shadow-2xl  rounded-3xl col-start-1 md:col-span-2 md:col-start-2 flex flex-col justify-start ">
             <h1 className="text-left font-bold text-2xl my-3 mt-1 ">Login</h1>
             <div className="text-left ">
               <label htmlFor="username" className="text-left my-2 py-2">
