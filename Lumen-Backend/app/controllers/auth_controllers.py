@@ -126,6 +126,9 @@ def logout():
 
 def get_me():
     id = get_jwt_identity()
-    username = get_jwt()["username"]
+    claims = get_jwt()
+    username = claims.get("username")
 
-    return jsonify({"msg": f"welcome {id}!", "username": username})
+    if not username:
+        return jsonify({"msg": "welcome !", "username": "not found"}), 401
+    return jsonify({"msg": f"welcome {id}!", "username": username}), 200

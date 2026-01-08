@@ -1,4 +1,5 @@
 from ..extensions import mongo
+from bson import ObjectId
 
 
 # database name auth_student
@@ -37,7 +38,7 @@ def delete_user(email):
     return
 
 
-# database name user_imgs
+# database name user_imgs #used nowhere
 def search_for_img_name(public_name):
     img_details = mongo.db.user_imgs.find_one({"img_id": public_name})
     return img_details
@@ -53,9 +54,18 @@ def update_image_details_in_db(img_id, update_data):
     return {"msg": "success"}
 
 
-def search_for_user_uploads(user):
-    details = mongo.db.user_imgs.find({"owner": user})
-    return details
+def search_for_user_uploads(user, cursor, limit):
+    if cursor:
+        query = {
+            "username": user,
+            "_id": {"$lt": ObjectId(cursor)},
+        }
+    else:
+        query = {"username": user}
+    limit = int(limit)
+    result = mongo.db.user_imgs.find(query).sort({"_id": -1}).limit(limit)
+    count = mongo.db.user_imgs.count_documents({"username": user})
+    return result, count
 
 
 def update_Like_counts_in_img(img_id):
@@ -73,37 +83,50 @@ def delete_image_details(img_id):
     return {"msg": "success"}
 
 
+def find_all_user_uploads(cursor, limit):
+    if cursor:
+        query = {"source": "lumen", "_id": {"$lt": ObjectId(cursor)}}
+    else:
+        query = {"source": "lumen"}
+
+    limit = int(limit)
+    result = mongo.db.user_imgs.find(query).sort({"_id": -1}).limit(limit)
+    count = mongo.db.user_imgs.count_documents({"source": "lumen"})
+    return result, count
+
+
 # search related queries
 
 
-def find_search_results_title(keyword, skip, limit):
-    result = (
-        mongo.db.user_imgs.find({"title": {"$regex": keyword, "$options": "i"}})
-        .skip(skip)
-        .limit(limit)
-    )
-    return result
+# def find_search_results_title(keyword, skip, limit):
+#     result = (
+#         mongo.db.user_imgs.find({"title": {"$regex": keyword, "$options": "i"}})
+#         .skip(skip)
+#         .limit(limit)
+#     )
+#     return result
 
 
-def find_search_results_tags(keyword, skip, limit):
-    result = (
-        mongo.db.user_imgs.find({"tags": {"$regex": keyword, "$options": "i"}})
-        .skip(skip)
-        .limit(limit)
-    )
-    return result
+# def find_search_results_tags(keyword, skip, limit):
+#     result = (
+#         mongo.db.user_imgs.find({"tags": {"$regex": keyword, "$options": "i"}})
+#         .skip(skip)
+#         .limit(limit)
+#     )
+#     return result
 
 
 # updated search on index
-def find_text_search_result(keyword, skip, limit):
-    results = (
-        mongo.db.user_imgs.find(
-            {"$text": {"$search": keyword}}, {"score": {"$meta": "textScore"}}
-        )
-        .sort([("score", {"$meta": "textScore"})])
-        .skip(skip)
-        .limit(limit)
-    )
+def find_text_search_result(keyword, cursor, limit):
+    if cursor:
+        query = {"$text": {"$search": keyword}, "_id": {"$lt": ObjectId(cursor)}}
+
+    else:
+        query = {"$text": {"$search": keyword}}
+
+    limit = int(limit)
+
+    results = mongo.db.user_imgs.find(query).sort({"_id": -1}).limit(limit)
 
     return results
 
@@ -114,22 +137,28 @@ def find_total_count_of_text_results(keyword):
 
 
 # use index based text search
-def find_total_count_of_results_title(keyword):
-    result = mongo.db.user_imgs.count_documents(
-        {"title": {"$regex": keyword, "$options": "i"}}
-    )
-    return result
+# def find_total_count_of_results_title(keyword):
+#     result = mongo.db.user_imgs.count_documents(
+#         {"title": {"$regex": keyword, "$options": "i"}}
+#     )
+#     return result
 
 
-def find_total_count_of_results_tag(keyword):
-    result = mongo.db.user_imgs.count_documents(
-        {"tags": {"$regex": keyword, "$options": "i"}}
-    )
-    return result
+# def find_total_count_of_results_tag(keyword):
+#     result = mongo.db.user_imgs.count_documents(
+#         {"tags": {"$regex": keyword, "$options": "i"}}
+#     )
+#     return result
 
 
-def find_all_images():
-    result = mongo.db.user_imgs.find({})
+def find_all_images(cursor, limit):
+    if cursor:
+        query = {"_id": {"$lt": ObjectId(cursor)}}
+    else:
+        query = {}
+
+    limit = int(limit)
+    result = mongo.db.user_imgs.find(query).sort({"_id": -1}).limit(limit)
     count = mongo.db.user_imgs.count_documents({})
     return result, count
 
@@ -145,7 +174,12 @@ def delete_collection_data(user, img):
     return {"msg": "success"}
 
 
-def search_collection_of_user(user):
+def search_collection_of_user(user, cursor, limit):
+    match_stage = {"user.username": user}
+    if cursor:
+        match_stage["_id"] = {"$lt": ObjectId(cursor)}
+
+    limit = int(limit)
     response = mongo.db.user_imgs.aggregate(
         [
             {
@@ -157,13 +191,14 @@ def search_collection_of_user(user):
                 }
             },
             {"$unwind": "$user"},
-            {"$match": {"user.username": user}},
+            {"$match": match_stage},
+            {"$sort": {"_id": -1}},
+            {"$limit": limit},
         ]
     )
-    data = mongo.db.user_collection.find(
-        {"username": user}
-    )  # remove if above code works
-    return response
+    result = list(response)
+
+    return result
 
 
 def delete_all_image_likes(id):
@@ -193,6 +228,11 @@ def increment_counter(name):
 def insert_feedback_data(data):
     insertion = mongo.db.user_feedback.insert_one(data).inserted_id
     return insertion
+
+
+def find_all_feedbacks():
+    result = mongo.db.user_feedback.find({})
+    return result
 
 
 # database name content_report

@@ -2,7 +2,7 @@
 from flask import request, jsonify
 from marshmallow import ValidationError
 from ..models.feedback_validation import feedback_validation
-from ..utils.db import insert_feedback_data, insert_content_report
+from ..utils.db import insert_feedback_data, insert_content_report, find_all_feedbacks
 from flask_jwt_extended import get_jwt
 
 
@@ -31,6 +31,11 @@ def send_content_violetion_report(id):
     details = {"img_id": id, "report_by": user, "reason": data.get("reason")}
     insertion = insert_content_report(details)
     return jsonify({"msg": "success", "insert id": insertion}), 200
+
+
+def fetch_feedback_data():
+    result = find_all_feedbacks()
+    return jsonify({"msg": "success", "result": result}), 201
 
 
 def create_feedback_data(data):

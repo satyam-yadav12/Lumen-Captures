@@ -29,10 +29,11 @@ def generate_unique_name_for_img(title):
 def create_img_data_to_upload(data, Url, folder, user, img_id, height, width):
     img_data = {
         "img_id": img_id,
-        "owner": user,
+        "username": user,
         "title": data["title"],
         "description": data["description"],
         "tags": data["tags"],
+        "source": "lumen",
         "secure_url": Url,
         "photo_height": height,
         "photo_width": width,
@@ -43,6 +44,6 @@ def create_img_data_to_upload(data, Url, folder, user, img_id, height, width):
         },
         "count_of_likes": 0,
         "created_at": datetime.now(timezone.utc),
-        "download_count": "none",
+        "download_count": "NA",
     }
     return img_data

@@ -75,11 +75,22 @@ def upload_new_img():
 
 
 def get_user_uploads():
-    id = get_jwt()["username"]
-
+    cursor = request.args.get("cursor")
+    limit = request.args.get("limit") or 21
+    claims = get_jwt()
+    id = claims.get("username")
     if id:
-        user_uploads = search_for_user_uploads(id)
-    return jsonify({"msg": "user uploaded images are fetched", "data": user_uploads})
+        user_uploads, count = search_for_user_uploads(id, cursor, limit)
+    return (
+        jsonify(
+            {
+                "msg": "user uploaded images are fetched",
+                "result": user_uploads,
+                "total": count,
+            }
+        ),
+        200,
+    )
 
 
 # route("/uploads/<id>/update", methods=["PUT", "PATCH"])
@@ -95,7 +106,7 @@ def update_img_details(id):
     }
     if updated_img:
         update_image_details_in_db(id, updated_img)
-    return jsonify({"msg": "image updated"})
+    return jsonify({"msg": "image updated"}), 200
 
 
 # route("/uploads/<id>/delete", methods=["DELETE"])

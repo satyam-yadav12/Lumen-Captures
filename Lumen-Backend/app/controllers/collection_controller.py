@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from flask_jwt_extended import get_jwt
 from ..services.collection_helpers import create_collection_data
 from ..utils.db import (
@@ -15,7 +15,10 @@ from ..utils.db import (
 
 
 def save_to_collection(img_id):
-    user_name = get_jwt()["username"]
+    claims = get_jwt()
+    user_name = claims.get("username")
+    if not user_name:
+        return jsonify({"msg": "aunauthorize"}), 401
     try:
         liked = check_if_like_exist(img_id, user_name)
         if not liked:
@@ -41,6 +44,11 @@ def unsave_from_collection(img_id):
 
 
 def get_collection_of_user():
-    user_name = get_jwt()["username"]
-    collection = search_collection_of_user(user_name)
-    return jsonify({"msg": "success", "collection": collection}), 200
+    cursor = request.args.get("cursor") or None
+    limit = request.args.get("limit") or 21
+    claims = get_jwt()
+    user_name = claims.get("username")
+    if not user_name:
+        return jsonify({"msg": "aunauthorize"}), 401
+    collection = search_collection_of_user(user_name, cursor, limit)
+    return jsonify({"msg": "success", "result": collection, "count": "NA"}), 200
