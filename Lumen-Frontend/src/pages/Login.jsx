@@ -11,7 +11,7 @@ const Login = () => {
   const navigate = useNavigate()
 
   const { user, setUser, logout } = useContext(AuthContext)
-  const { message, setMessage } = useContext(AlertContext)
+  const { setMessage } = useContext(AlertContext)
   const [formData, setFormData] = useState({ Email: "", Password: "" })
   const [disableSubmit, setDisableSubmit] = useState(false)
 
@@ -21,18 +21,16 @@ const Login = () => {
     try {
       if (formData['Email'] != "" && formData['Password'] != "") {
         const result = await LoginWithLumen(formData)
-        console.log(result['user name'])
+        // console.log(result['user name'])
         setUser(result['user name'])
         setMessage(`Welcome ${result['user name']}!`)
         setDisableSubmit(() => false)
         navigate('/')
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       setMessage(error.response.data['error'])
     }
-
-
 
     setFormData({ Email: "", Password: "" })
     setDisableSubmit(() => false)
@@ -80,7 +78,7 @@ const Login = () => {
             </div>
             <div className="flex flex-col justify-center bg-[#00A2CA] dark:bg-white  dark:text-black text-white rounded-sm my-2  font-semibold">
               <Button onClick={handleLogin} color="inherit" disabled={disableSubmit}>
-                Login{disableSubmit ? <CircularProgress size={10} /> : ""}
+                Login{disableSubmit ? <CircularProgress size={20} /> : ""}
               </Button>
             </div>
             <p className="font-light text-center ">

@@ -1,31 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { SearchKeyword } from '../services/Search_misc'
-import { AlertContext } from '../context/AlertMessage'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Image from '../components/ImageCard/ImageCard'
+import useImagePagination from '../hooks/useImagePagination'
 
 const Explore = () => {
-  const { setMessage } = useContext(AlertContext)
-  const [images, setImages] = useState([])
 
-  const page = useParams()
+  const { images, loading, hasMore, page, setPage, request, cursor } = useImagePagination()
+
+
+  const { query } = useParams()
 
 
 
   useEffect(() => {
-    console.log(page, 'page')
     const fetchImages = (async () => {
-      const response = await SearchKeyword(page.query, page['page'])
-      console.log(response)
-      setImages(response.data.search_result)
-      setMessage("search images was fetched")
+      const response = await request({ url: `/lumen/search?q=${query}&cursor=${cursor}&limit=${10}`, method: "GET" })
+      // console.log(response)
     })
     fetchImages()
-  }, [page])
+
+  }, [page, query])
+
   return (
     <div>
-      {images ? <Image images={images} /> : "loading..."}
-
+      {images ? <Image images={images} hasMore={hasMore} page={page} setPage={setPage} loading={loading} /> : "loading..."}
     </div>
   )
 }

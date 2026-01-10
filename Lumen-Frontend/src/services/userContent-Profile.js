@@ -75,6 +75,10 @@ export const deleteImage = (async (img_id) => {
     }
 })
 
+export const find_specific_img = (async (img_id) => {
+    const response = await axiosApi.get(`/user/uploads/${img_id}`)
+    return response
+})
 
 export const updateImage = (async (img_id, payload) => {
     try {

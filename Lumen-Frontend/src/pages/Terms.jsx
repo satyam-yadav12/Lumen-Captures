@@ -90,9 +90,11 @@ export const Terms = () => {
 
                 {/* Footer */}
                 <footer className="pt-8 border-t text-sm text-gray-500  text-left">
-                    © 2025 Lumen Captures. All rights reserved.
+                    © 2026 Lumen Captures. All rights reserved.
                 </footer>
             </main>
         </div>
     )
 }
+
+export default Terms;

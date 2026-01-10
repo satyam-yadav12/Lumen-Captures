@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
-import mockData from "../../assets/photos_extracted.json";
+
 
 const ImageModal = ({ id, show, setShow }) => {
   const [imgUrl, setImgUrl] = useState(null);
-  const [loaded, setLoaded] = useState(false); //not used yet, make it useful
   const [imageDetails, setImageDetails] = useState({
     author: "",
     title: "",
@@ -13,15 +12,13 @@ const ImageModal = ({ id, show, setShow }) => {
   useEffect(() => {
     setImgUrl(id.photo_image_url || id.secure_url)
     setImageDetails({
-      author: id.photographer_username || id.owner,
+      author: id.photographer_username || id.username,
       title: id.ai_description || id.title,
       description: id.photo_description || id.description,
     });
   }, [id]);
 
-  // const boxModal =useCallback((status)=>{
-  //   setShow(status)
-  // }),
+
 
   return (
     <>

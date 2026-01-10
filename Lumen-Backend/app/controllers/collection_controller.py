@@ -8,6 +8,7 @@ from ..utils.db import (
     check_if_like_exist,
     update_Like_counts_in_img,
     decrement_Like_count_in_img,
+    fetch_all_liked_images,
 )
 
 
@@ -52,3 +53,12 @@ def get_collection_of_user():
         return jsonify({"msg": "aunauthorize"}), 401
     collection = search_collection_of_user(user_name, cursor, limit)
     return jsonify({"msg": "success", "result": collection, "count": "NA"}), 200
+
+
+def fetch_all_likes_of_user():
+    claims = get_jwt()
+    user_name = claims.get("username")
+    if not user_name:
+        return jsonify({"msg": "aunauthorize"}), 401
+    collection = fetch_all_liked_images(user_name)
+    return jsonify({"msg": "success", "collection": collection}), 200

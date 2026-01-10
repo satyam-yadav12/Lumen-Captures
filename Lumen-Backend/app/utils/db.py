@@ -94,6 +94,9 @@ def find_all_user_uploads(cursor, limit):
     count = mongo.db.user_imgs.count_documents({"source": "lumen"})
     return result, count
 
+def find_specific_img(img_id):
+    result = mongo.db.user_imgs.find_one({"img_id": img_id})
+    return result
 
 # search related queries
 
@@ -198,6 +201,11 @@ def search_collection_of_user(user, cursor, limit):
     )
     result = list(response)
 
+    return result
+
+
+def fetch_all_liked_images(user):
+    result = mongo.db.user_collection.find({"username": user})
     return result
 
 

@@ -31,7 +31,7 @@ const UploadImage = () => {
 
       // setMessage("image was uploaded")
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       message = error['message']
       if (error.response.status === 401) {
         logout()
@@ -62,9 +62,9 @@ const UploadImage = () => {
 
     }
     payload.append('picture', payloadImage)
-    console.log(payload)
+    // console.log(payload)
     const msg = await uploadImageDetails(payload)
-    console.log(msg, 'msg')
+    // console.log(msg, 'msg')
     setMessage(msg)
 
     setDisableSubmit(() => false)
@@ -83,9 +83,7 @@ const UploadImage = () => {
     }
 
   })
-  useEffect(() => {
-    console.log(imageDetails, 'imageDetails')
-  }, [imageDetails])
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5  mt-5 overflow-hidden m-auto">
@@ -151,7 +149,7 @@ const UploadImage = () => {
         </div>
       </div>
       <div className="m-auto my-4 col-span-2">
-        <Button variant="contained" disabled={disableSubmit} onClick={(e) => handleSubmit(e)}>Upload Image{disableSubmit ? <CircularProgress size={10} /> : ""}</Button>
+        <Button variant="contained" disabled={disableSubmit} onClick={(e) => handleSubmit(e)}>Upload Image{disableSubmit ? <CircularProgress size={20} /> : ""}</Button>
       </div>
     </div>
   );

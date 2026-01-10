@@ -12,8 +12,7 @@ const ImagePlace = ({
   const [loaded, setLoaded] = useState(false);
   return (
     <>
-      <div className={`relative w-full rounded-xl overflow-hidden aspect-[${data.photo_width || 1
-        }/${data.photo_height || 1}]`}>
+      <div className={`relative w-full rounded-xl overflow-hidden aspect-[${data.photo_height}/${data.photo_width}]`}>
         {!loaded && (
           <div
             className={`absolute w-full h-full  animate-pulse bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 border-gray-400 rounded-xl inset-0 `}
@@ -24,7 +23,7 @@ const ImagePlace = ({
         <img
           src={data.photo_image_url || data.secure_url}
           alt="img"
-          ref={index === photos.length - 1 ? lastImageRef : null}
+          ref={data.img_id == photos ? lastImageRef : null}
           id={data.photo_id || data.img_id}
           loading="lazy"
           className={` object-cover bg-gray-200 m-auto rounded-xl min-h-30 w-full transition-opacity duration-500 

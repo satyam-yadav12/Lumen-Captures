@@ -5,6 +5,7 @@ from ..controllers.collection_controller import (
     save_to_collection,
     unsave_from_collection,
     get_collection_of_user,
+    fetch_all_likes_of_user,
 )
 
 
@@ -27,3 +28,9 @@ def remove_img_from_user_collection(img_id):
 @jwt_required()
 def find_user_collection():
     return get_collection_of_user()
+
+
+@collection_bp.route("/likes", methods=["GET"])
+@jwt_required()
+def fetch_all_likes():
+    return fetch_all_likes_of_user()

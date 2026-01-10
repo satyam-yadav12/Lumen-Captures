@@ -11,10 +11,9 @@ import Register from "../pages/Register";
 import Developer from "../pages/Developer";
 import About from "../pages/About";
 import Layout from "../components/Layout/Layout";
-import Test from "../pages/Test";
 import Explore from "../pages/Explore";
-import { Terms } from "../pages/Terms";
-
+import Terms from "../pages/Terms";
+import UpdateImage from "../pages/UpdateImage";
 
 const PageRoutes = () => {
   return (
@@ -25,13 +24,14 @@ const PageRoutes = () => {
           <Route path="profile" element={<Profile />} />
           <Route path="collection" element={<Collections />} />
           <Route path="uploads" element={<Uploads />} />
+          <Route path="uploads/:img_id" element={<UpdateImage />} />
           <Route path="upload-image" element={<UploadImage />} />
           <Route path="feedback" element={<Feedback />} />
           <Route path="developer" element={<Developer />} />
           <Route path="about" element={<About />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="explore/:query/:page" element={<Explore />} />
+          <Route path="explore/:query" element={<Explore />} />
           <Route path="terms" element={<Terms />} />
           <Route path="*" element={"Not found"} />
         </Route>

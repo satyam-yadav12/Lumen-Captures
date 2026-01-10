@@ -2,9 +2,7 @@ import { Button, CircularProgress } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterWithLumen } from "../services/authApi";
-import { Notification } from "../components/Notification";
 import { AlertContext } from "../context/AlertMessage";
-import { AuthContext } from "../context/AuthContext";
 import GoogleLoginButton from "../components/googleLoginButton";
 
 
@@ -32,12 +30,12 @@ const Register = () => {
     try {
       const response = await RegisterWithLumen(formData)
       setMessage("Registration success")
-      console.log(response)
+      // console.log(response)
       setDisableSubmit(() => false)
       navigate("/login")
     } catch (error) {
       setMessage("registration fail")
-      console.log(error)
+      // console.log(error)
 
     }
     setDisableSubmit(() => false)
@@ -147,7 +145,7 @@ const Register = () => {
           </div>
           <div className="flex flex-col justify-center md:col-span-2 w-full p-1 m-auto text-center row-start-9 md:row-start-6 bg-[#00A2CA] dark:bg-white dark:text-black  rounded-sm my-2 text-white font-semibold">
             <Button onClick={e => handleRegister(e)} color="inherit" disabled={disableSubmit}>
-              Register{disableSubmit ? <CircularProgress size={10} /> : ""}
+              Register{disableSubmit ? <CircularProgress size={20} /> : ""}
             </Button>
           </div>
           <p className="font-light text-center md:col-span-2 row-start-10 md:row-start-7 ">

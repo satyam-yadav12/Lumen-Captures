@@ -1,6 +1,6 @@
 import { React, createContext, useContext, useEffect, useState } from "react"
 import { CheckActiveSession, LogoutFromLumen } from "../services/authApi"
-import { AlertContext } from "./AlertMessage"
+
 
 export const AuthContext = createContext("")
 
@@ -10,11 +10,7 @@ export const AuthProvider = (({ children }) => {
     const [isAuthChecked, setIsAuthChecked] = useState(false)
 
     useEffect(() => {
-
-
         checkSession()
-
-
     }, [])
 
     const checkSession = async () => {

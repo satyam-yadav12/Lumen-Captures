@@ -11,6 +11,7 @@ from ..utils.db import (
     search_for_user_uploads,
     delete_image_details,
     delete_all_image_likes,
+    find_specific_img
 )
 
 
@@ -118,3 +119,8 @@ def delete_user_img(id):
     delete_image_details(id)
     delete_all_image_likes(id)
     return jsonify({"msg": "image deleted successfull"}), 200
+
+def find_img(id):
+    user = get_jwt()["username"]
+    result = find_specific_img(id)
+    return jsonify({"msg": "image fetch successful", "result": result}), 200

@@ -1,49 +1,29 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import Image from "../components/ImageCard/ImageCard";
-import mockData from "../assets/photos.json";
-import { useNavigate } from "react-router-dom";
-import { fetchAllImages, fetchCollection } from "../services/Search_misc";
-import { AuthContext } from "../context/AuthContext";
-import { AlertContext } from "../context/AlertMessage";
+
+
+import useImagePagination from "../hooks/useImagePagination";
 
 const Collections = () => {
-  const { user, logout } = useContext(AuthContext)
-  const { setMessage } = useContext(AlertContext)
-  const navigate = useNavigate()
 
-  const [likedPhotos, setLikedPhotos] = useState([])
+
+  const { images, loading, hasMore, page, setPage, limit, request, cursor } = useImagePagination()
 
 
 
   useEffect(() => {
-    const fetchLikedImages = (async () => {
-      if (!user) {
-        return
-      }
-      try {
+    const fetchImages = (async () => {
+      const response = await request({ url: "/images/collection", method: "GET", params: { cursor: cursor, limit: limit } })
 
-        const response = await fetchCollection()
-        console.log(response, 'likes')
-        setLikedPhotos(response.collection)
-        setMessage('liked image was fetched')
-      } catch (error) {
-        if (error.data.status && error.data.status === 401) {
-
-          logout()
-          navigate('/login')
-
-        }
-      }
     })
+    fetchImages()
 
-    fetchLikedImages()
-  }, [user])
-
+  }, [page])
 
   return (
     <div>
       <div className="pt-5 w-[98%] m-auto">
-        {likedPhotos ? <Image images={likedPhotos} /> : "loading..."}
+        {images ? <Image images={images} hasMore={hasMore} page={page} setPage={setPage} loading={loading} /> : "loading..."}
 
       </div>
     </div>

@@ -5,7 +5,7 @@ const SearchBar = () => {
   const [searchInput, setSearchInput] = useState("")
   const navigate = useNavigate()
   const SearchKeyword = () => {
-    navigate(`/explore/${searchInput}/1`)
+    navigate(`/explore/${searchInput}`)
   };
   return (
     <div className="w-full flex flex-col justify-start m-auto">

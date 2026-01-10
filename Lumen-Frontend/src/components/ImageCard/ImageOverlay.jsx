@@ -27,7 +27,7 @@ const ImageOverlay = ({ createModal, setShowUri, data, handleLike, like, TextVal
         </div>
         <div className="flex flex-row h-[20%] p-2 ">
           <p className="h-full w-max  px-2 mr-auto shadow-2xl">
-            {data.photographer_username || data.owner}
+            {data.photographer_username || data.username}
           </p>
 
           {like.includes(`${data.photo_id || data.img_id}`) ? (

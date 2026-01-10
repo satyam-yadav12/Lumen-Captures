@@ -25,7 +25,7 @@ export const removeFromSaved = (async (img_id) => {
 
 export const fetchCollection = (async () => {
     try {
-        const response = await axiosApi.get("/images/collection")
+        const response = await axiosApi.get("/images/likes")
         return response.data
     }
     catch (error) {

@@ -6,7 +6,7 @@ const ImageActionBar = ({ data, like, handleLike, TextValues }) => {
     <div className="h-12 p-2 block lg:hidden rounded-2xl">
       <div className="flex flex-row   ">
         <p className="h-full w-max  px-1 pt-1.5 mr-auto font-semibold">
-          {data.photographer_username || data.owner}
+          {data.photographer_username || data.username}
         </p>
         <div className="ml-auto flex flex-row">
           {like.includes(`${data.photo_id || data.img_id}`) ? (

@@ -1,35 +1,30 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import Image from "../components/ImageCard/ImageCard";
-import mockData from "../assets/photos.json";
-import { GetAllImagesByUser } from "../services/userContent-Profile";
 import { AuthContext } from "../context/AuthContext";
+import useImagePagination from "../hooks/useImagePagination";
 
 const Uploads = () => {
-  const { logout } = useContext(AuthContext)
-  const [imageData, setImageData] = useState([])
+
+  const { user } = useContext(AuthContext)
+  const { images, loading, hasMore, page, setPage, limit, request, cursor } = useImagePagination()
+
   useEffect(() => {
-    const fetchUserUploads = (async () => {
-      try {
-        const response = await GetAllImagesByUser()
-        console.log(response)
-        setImageData(response.data)
-      } catch (error) {
-        if (error.response.status === 401) {
-          logout()
-        }
-        console.log(error)
-      }
+    const fetchImages = (async () => {
+      const response = await request({ url: "/user/uploads", method: "GET", params: { cursor: cursor, limit: limit } })
+
+
     })
-    fetchUserUploads()
-  }, [])
+    fetchImages()
+
+  }, [page])
   return (
     <div>
       <h1 className="mt-5 m-auto text-2xl text-center">
-        Image uploaded by {"Username"}
+        Image uploaded by {user}
       </h1>
       <div className="pt-5 w-[98%] m-auto">
-        {imageData ? <Image images={imageData} TextValues={['Edit Image', 'Delete Image']} /> : "loading..."}
-
+        {images ? <Image images={images} TextValues={['Edit Image', 'Delete Image']} hasMore={hasMore} page={page} setPage={setPage} loading={loading} /> : "loading..."}
+        { }
       </div>
     </div>
   );

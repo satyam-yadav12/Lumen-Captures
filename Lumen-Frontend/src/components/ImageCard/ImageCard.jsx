@@ -10,8 +10,10 @@ import { fetchCollection, removeFromSaved, saveToCollection } from "../../servic
 import { AuthContext } from "../../context/AuthContext"
 import { useNavigate } from "react-router-dom"
 import { AlertContext } from "../../context/AlertMessage";
+import useColumnCount from "../../hooks/useColumnCount";
 
-const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download'] }) => {
+const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download'], hasMore, loading, page, setPage }) => {
+  const colCount = useColumnCount()
   const { user, logout } = useContext(AuthContext)
   const { setMessage } = useContext(AlertContext)
   const navigate = useNavigate()
@@ -20,58 +22,34 @@ const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download
   const [show, setShow] = useState(false);
   const [showUri, setShowUri] = useState("");
   //state for infinite scrolling; may need to move it from here
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(0);
-  const [photos, setPhotos] = useState([]);
-  const limit = 10;
+
+
+  const [spreadImages, setSpreadImages] = useState([])
+
   const observer = useRef(null);
   const lastImageRef = useRef(null);
 
 
 
-  useEffect(() => {
-    setPhotos([]);
-    setPage(0);
-    setHasMore(true);
-  }, [images]);
 
   //infinite scrolling hooks and functions
 
 
+
+
   const loadMore = () => {
-    setPage((prev) => prev + 1);
+    setPage(p => p + 1);
   };
-  useEffect(() => {
-    console.log(photos, "photos")
-  }, [photos])
+
 
   useEffect(() => {
-
-    const fetchImages = async () => {
-
-      setLoading(true);
-      const start = limit * page;
-      const end = start + limit;
-
-      const temp = images.slice(start, end); //crete api call
-
-      setPhotos((prev) => [...prev, ...temp]);
-      if (temp.length < limit) setHasMore(false);
-
-      setLoading(false);
-    };
-    fetchImages();
-  }, [page, images]);
-
-  useEffect(() => {
-    if (!hasMore || loading) return;
+    if (!hasMore) return;
 
     if (observer.current) observer.current.disconnect();
 
     observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        loadMore();
+      if (entries[0].isIntersecting && hasMore && !loading) {
+        loadMore()
       }
     });
 
@@ -85,15 +63,45 @@ const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download
       }
 
     }
-  }, [hasMore, loading, photos]);
+  }, [loading, hasMore]);
 
   //infinite scroll hooks and effects
 
+  const buildColumns = ((images, colCount) => {
+
+    const temp = []
+    if (colCount) {
+      if (colCount === 3) {
+
+        temp.push([], [], [])
+      }
+      else if (colCount === 2) {
+
+        temp.push([], [])
+      }
+      else {
+        temp.push([])
+
+      }
+    }
+
+    images.forEach((element, index) => {
+
+      temp[(index % colCount)].push(element)
+    });
+
+    setSpreadImages(temp)
+
+    return
+  })
+  useEffect(() => {
+    buildColumns(images, colCount)
+  }, [images, colCount])
 
   //manage likes
   useEffect(() => {
     const fetchLikedImages = (async () => {
-      console.log(user, 'userstatsu')
+      // console.log(user, 'userstatsu')
       if (!user) {
         setLike([])
         return;
@@ -101,15 +109,15 @@ const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download
 
       try {
         const response = await fetchCollection()
-        console.log(response, 'likes')
+        // console.log(response, 'likes')
         let tempLikes = []
         response['collection'].map((val, index) => {
           tempLikes.push(val.img_id)
         })
-        console.log(tempLikes, 'temp')
+
         setLike(tempLikes)
       } catch (error) {
-        console.log(error, "error1")
+        // console.log(error, "error1")
         if (error.response.status && error.response.status === 401) {
 
           logout()
@@ -120,14 +128,14 @@ const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download
 
     })
     fetchLikedImages()
-  }, [user, photos])
+  }, [user, images])
   const sendLikeToLumen = (async (img_id) => {
     try {
       const response = await saveToCollection(img_id)
-      console.log(response)
+      // console.log(response)
       setMessage(`like sent`)
     } catch (error) {
-      console.log(error, "error")
+      // console.log(error, "error")
       if (error.response.status && error.response.status === 401) {
 
         logout()
@@ -140,10 +148,10 @@ const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download
   const removeLikeFromLumen = (async (img_id) => {
     try {
       const response = await removeFromSaved(img_id)
-      console.log(response)
+      // console.log(response)
       setMessage(`dislike sent`)
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       if (error.status && error.status === 401) {
 
         logout()
@@ -171,48 +179,58 @@ const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download
       ? (document.body.style.overflow = "hidden")
       : (document.body.style.overflow = "auto");
   };
-  // FIXME : setLoading & loading functions are universial, make it to work like individual image
+
 
   return (
-    <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 px-4">
+
+
+    <div>
       <div>
         <ImageModal id={showUri} show={show} setShow={createModal} />
+        {/* change names and prop names */}
       </div>
-      {photos.map((data, index) => {
-        return (
-          <div
-            key={data.photo_id || data.img_id}
-            className={`group  hover:opacity-98 relative break-inside-avoid overflow-hidden rounded-xl my-4 h-max w-[90vw] sm:w-[45vw] lg:w-[30vw] `}
+      <div className='flex flex-row gap-4 px-4'>
+        {spreadImages.map((val, index) => {
 
-          >
-            <ImagePlace
-              data={data}
-              index={index}
-              createModal={createModal}
-              setShowUri={setShowUri}
-              lastImageRef={lastImageRef}
-              photos={photos}
-            />
+          return <div key={index} className='flex flex-col'>
+            {val.map((data, index) => {
+              return (
+                <div
+                  key={data.photo_id || data.img_id}
+                  className={`group  hover:opacity-98 relative break-inside-avoid overflow-hidden rounded-xl my-4 h-max w-[90vw] sm:w-[45vw] lg:w-[30vw] `}
+
+                >
+                  <ImagePlace
+                    data={data}
+                    index={index}
+                    createModal={createModal}
+                    setShowUri={setShowUri}
+                    lastImageRef={lastImageRef}
+                  />
 
 
 
-            {/*  image overlay */}
+                  {/*  image overlay */}
 
-            <ImageOverlay
-              createModal={createModal}
-              setShowUri={setShowUri}
-              data={data}
-              handleLike={handleLike}
-              like={like}
-              TextValues={TextValues}
-            />
+                  <ImageOverlay
+                    createModal={createModal}
+                    setShowUri={setShowUri}
+                    data={data}
+                    handleLike={handleLike}
+                    like={like}
+                    TextValues={TextValues}
+                  />
 
-            <ImageActionBar data={data} like={like} handleLike={handleLike} TextValues={TextValues} />
+                  <ImageActionBar data={data} like={like} handleLike={handleLike} TextValues={TextValues} />
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
-      {loading && <CircularProgress />}
-      {!hasMore && <p>No more images to show</p>}
+        })}
+      </div>
+      <div className='h-max flex flex-row justify-center' ref={lastImageRef} >
+        {hasMore ? <CircularProgress size={50} /> : 'no more images to show'}
+      </div >
     </div>
   );
 };
