@@ -11,7 +11,7 @@ from ..utils.db import (
     search_for_user_uploads,
     delete_image_details,
     delete_all_image_likes,
-    find_specific_img
+    find_specific_img,
 )
 
 
@@ -99,6 +99,11 @@ def get_user_uploads():
 
 def update_img_details(id):
     data = request.json
+    claims = get_jwt()
+    username = claims.get("username")
+    img_details = find_specific_img(id)
+    if not username or username != img_details["username"]:
+        return jsonify({"msg": "invalid action"}), 403
 
     updated_img = {
         "title": data["title"],
@@ -119,6 +124,7 @@ def delete_user_img(id):
     delete_image_details(id)
     delete_all_image_likes(id)
     return jsonify({"msg": "image deleted successfull"}), 200
+
 
 def find_img(id):
     user = get_jwt()["username"]

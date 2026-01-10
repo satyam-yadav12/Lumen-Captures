@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from "react"
 import axiosApi from "../services/refreshToken";
 import { AlertContext } from "../context/AlertMessage"
+import { AuthContext } from "../context/AuthContext";
 
 
 function useImagePagination() {
-
-
+    const { logout } = useContext(AuthContext)
     const { setMessage } = useContext(AlertContext)
     const [images, setImages] = useState([])
     const [loading, setLoading] = useState(false);
@@ -24,11 +24,14 @@ function useImagePagination() {
             const result = response.data.result
             setImages((prev) => ([...prev, ...response.data.result]));
             if (response.data.result.length < limit) setHasMore(false);
-            setCursor(() => result[result.length - 1]["_id"]["$oid"])
+            setCursor(() => result.length >= 1 && (result[result.length - 1]["_id"]["$oid"]))
             setMessage(" images was fetched", result[result.length - 1]["_id"]["$oid"])
             console.log(response, `response ${config.url}`)
         }
         catch (error) {
+            if (error.response?.status == 401) {
+                logout()
+            }
             console.log(error, `error ${config.url}`)
         }
         finally {

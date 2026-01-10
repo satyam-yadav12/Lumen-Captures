@@ -10,7 +10,7 @@ const UpdateImage = () => {
     const [imagePreview, setImagePreview] = useState("");
     const { user, logout } = useContext(AuthContext)
     const [imageDetails, setImageDetails] = useState({ title: "", description: "", tags: [] })
-
+    const [loading, setLoading] = useState(false)
     const [disableSubmit, setDisableSubmit] = useState(false)
 
 
@@ -23,13 +23,15 @@ const UpdateImage = () => {
             if (response) {
                 img.title = response.data.result.title
                 img.description = response.data.result.description
-                img.tags = response.data.result.tags
+                img.tags = JSON.parse(response.data.result.tags)
                 // console.log(response.data.result.tags)
             }
 
             setImageDetails(img)
             setImagePreview(response.data.result.secure_url)
-
+            if (response.data.result.username != user) {
+                setDisableSubmit(true)
+            }
         }
         fetchImage()
     }, [])
@@ -43,20 +45,23 @@ const UpdateImage = () => {
             // setMessage("image was uploaded")
         } catch (error) {
             // console.log(error)
-            message = error['message']
-            if (error.response.status === 401) {
+            message = "action failed"
+            if (error.response?.status === 401) {
                 logout()
             }
 
 
+
         }
+        return message
     })
 
     const handleSubmit = (async (e) => {
         e.preventDefault()
-        if (disableSubmit) return;
+        if (loading) return;
 
         setDisableSubmit(() => true)
+        setLoading(() => true)
         let payload = {
             title: imageDetails.title,
             description: imageDetails.description,
@@ -70,6 +75,7 @@ const UpdateImage = () => {
         setMessage(msg)
 
         setDisableSubmit(() => false)
+        setLoading(() => false)
         return
     })
 
@@ -108,6 +114,7 @@ const UpdateImage = () => {
                         name="title"
                         onChange={handleChange}
                         value={imageDetails.title}
+                        disabled={disableSubmit}
                         id="title"
                     />
                     <label htmlFor="description">Enter Description</label>
@@ -116,6 +123,7 @@ const UpdateImage = () => {
                         id="description"
                         onChange={handleChange}
                         value={imageDetails.description}
+                        disabled={disableSubmit}
                         className="  border border-black p-4  my-1 block dark:border-white dark:bg-gray-100 dark:text-black"
                     ></textarea>
 
@@ -125,13 +133,14 @@ const UpdateImage = () => {
                         type="text"
                         name="tags"
                         value={imageDetails.tags.join(" ")}
+                        disabled={disableSubmit}
                         onChange={handleChange}
                         id="Tag"
                     />
                 </div>
             </div>
             <div className="m-auto my-4 col-span-2">
-                <Button variant="contained" disabled={disableSubmit} onClick={(e) => handleSubmit(e)}>Save Details{disableSubmit ? <CircularProgress size={20} /> : ""}</Button>
+                <Button variant="contained" disabled={disableSubmit} onClick={(e) => handleSubmit(e)}>Save Details{disableSubmit ? loading && <CircularProgress size={20} /> : ""}</Button>
             </div>
         </div>
     );

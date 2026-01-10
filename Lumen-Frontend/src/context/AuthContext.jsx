@@ -7,28 +7,31 @@ export const AuthContext = createContext("")
 export const AuthProvider = (({ children }) => {
 
     const [user, setUser] = useState("")
-    const [isAuthChecked, setIsAuthChecked] = useState(false)
-
+    const [loading, setLoading] = useState(false)
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
     useEffect(() => {
         checkSession()
     }, [])
 
     const checkSession = async () => {
-        try {
-            const response = await CheckActiveSession()
-            console.log(response.data)
 
+        try {
+            setLoading(true)
+            const response = await CheckActiveSession()
+            // console.log(response.data)
+            setIsAuthenticated(true)
             setUser(response.data.username)
         } catch (error) {
             console.log(error)
             setUser("")
         } finally {
-            setIsAuthChecked(true)
+            setLoading(false)
         }
     }
 
 
     async function logout() {
+
         if (user) {
             try {
                 const response = await LogoutFromLumen()
@@ -36,12 +39,17 @@ export const AuthProvider = (({ children }) => {
 
             } catch (error) {
                 console.log(error)
+                if (error.response?.error == 401) {
+                    setUser("")
+                }
             }
         }
         setUser("")
+
+
     }
     return (
-        <AuthContext.Provider value={{ user, setUser, logout }}>
+        <AuthContext.Provider value={{ user, setUser, logout, loading, isAuthenticated }}>
             {children}
         </AuthContext.Provider>
     )

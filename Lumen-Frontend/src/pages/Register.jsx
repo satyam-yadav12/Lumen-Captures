@@ -53,7 +53,7 @@ const Register = () => {
   return (<>
 
     <div className="relative w-full overflow-hidden">
-      <div className=" rounded-2xl flex flex-row w-screen h-[140vh] max-h-[150vh] md:h-[120vh] overflow-hidden">
+      <div className=" rounded-2xl flex flex-row w-screen h-[140vh] max-h-[150vh] md:h-[140vh] overflow-hidden">
         <div className="bg-white dark:bg-gray-300 w-full"></div>
         <div className="bg-[#00A2CA] dark:bg-[#222224] w-full"></div>
       </div>

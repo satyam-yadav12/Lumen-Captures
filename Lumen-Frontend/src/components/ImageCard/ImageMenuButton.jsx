@@ -5,13 +5,14 @@ import MenuItem from "@mui/material/MenuItem";
 import { AlertContext } from "../../context/AlertMessage"
 import { reportImageContent } from "../../services/Search_misc";
 import { deleteImage } from "../../services/userContent-Profile";
+import { useNavigate } from "react-router-dom";
 
 export default function ImageMenuButton({ TextValues, data }) {
   const { setMessage } = React.useContext(AlertContext)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [img, setImg] = React.useState("")
   const [img_id, setImg_id] = React.useState("")
-
+  const navigate = useNavigate()
   const open = Boolean(anchorEl);
   const handleClose = () => {
     setAnchorEl(null);
@@ -54,6 +55,9 @@ export default function ImageMenuButton({ TextValues, data }) {
   const editImage = ((val) => {
     console.log(val)
     setMessage(val)
+    navigate(`/uploads/${val}`)
+    return
+
   })
   const deleteImagefromLumen = (async (id) => {
     try {

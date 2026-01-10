@@ -14,18 +14,21 @@ import Layout from "../components/Layout/Layout";
 import Explore from "../pages/Explore";
 import Terms from "../pages/Terms";
 import UpdateImage from "../pages/UpdateImage";
-
+import PrivateRoute from "../components/PrivateRoute";
 const PageRoutes = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="collection" element={<Collections />} />
-          <Route path="uploads" element={<Uploads />} />
+          <Route path="profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="collection" element={<PrivateRoute><Collections /></PrivateRoute>} />
+          <Route path="uploads"
+            element={<PrivateRoute>
+              <Uploads />
+            </PrivateRoute>} />
           <Route path="uploads/:img_id" element={<UpdateImage />} />
-          <Route path="upload-image" element={<UploadImage />} />
+          <Route path="upload-image" element={<PrivateRoute><UploadImage /></PrivateRoute>} />
           <Route path="feedback" element={<Feedback />} />
           <Route path="developer" element={<Developer />} />
           <Route path="about" element={<About />} />
