@@ -1,4 +1,4 @@
-from flask import Blueprint, url_for
+from flask import Blueprint, url_for, jsonify
 from flask_jwt_extended import jwt_required
 from ..controllers.auth_controllers import register, login, logout, get_me
 from ..controllers.google_auth import authorize_by_google
@@ -40,3 +40,8 @@ def login_with_google():
 @auth_bp.route("/google/login/callback")
 def get_details_from_google():
     return authorize_by_google(google)
+
+
+@auth_bp.route("/healthz")
+def check_health():
+    return jsonify({"status": "ok"}), 200
