@@ -8,7 +8,7 @@ const UpdatePassword = () => {
   const [passwords, setPasswords] = useState({ Password: "", ConfirmPassword: "" })
 
   const updateUserPassword = (async () => {
-    console.log(passwords)
+    // console.log(passwords)
     if (!(passwords.Password && passwords.ConfirmPassword)) {
       setMessage("Password and Confirm Password fields must not be empty")
       return
@@ -18,7 +18,7 @@ const UpdatePassword = () => {
     }
     try {
       const response = await updatePassword(passwords)
-      console.log(response)
+      // console.log(response)
       setMessage(response.msg)
 
       setTimeout(() => {
@@ -27,7 +27,7 @@ const UpdatePassword = () => {
 
     }
     catch (error) {
-      console.log(error)
+      // console.log(error)
       setMessage("request failed")
     }
   })

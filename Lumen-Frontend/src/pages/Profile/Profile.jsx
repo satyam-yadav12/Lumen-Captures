@@ -34,14 +34,14 @@ const Profile = () => {
     }
     const fetchProfileData = (async (tempProfile) => {
       const response = await getProfile()
-      console.log(response)
+      // console.log(response)
       const responseField = response.data["user details"]
       for (const key in tempProfile) {
         if (key in responseField) {
           tempProfile[key] = responseField[key]
         }
       }
-      console.log(tempProfile)
+      // console.log(tempProfile)
       setProfileData(tempProfile)
     })
     try {
@@ -51,7 +51,7 @@ const Profile = () => {
       if (error.response.status === 401) {
         logout()
       }
-      console.log(error)
+      // console.log(error)
     }
   }, [])
 
@@ -74,13 +74,13 @@ const Profile = () => {
       City: profileData.City,
 
     }
-    console.log(payload)
+    // console.log(payload)
     try {
       const response = await editProfile(payload)
-      console.log(response)
+      // console.log(response)
       setMessage('success')
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       setMessage("failed")
     }
     setDisableEdit(true);
@@ -100,10 +100,10 @@ const Profile = () => {
 
     try {
       const response = await updateProfilePicture(payload)
-      console.log(response)
+      // console.log(response)
       setMessage("profile picture was changed")
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       setMessage("request failed")
     }
   });

@@ -16,7 +16,7 @@ const Login = () => {
   const [disableSubmit, setDisableSubmit] = useState(false)
 
   useEffect(() => {
-    console.log("mounted")
+
     if (user) {
       navigate("/")
     }

@@ -14,11 +14,10 @@ class Config:
     JWT_TOKEN_LOCATION = ["cookies"]
     JWT_COOKIE_SECURE = True
     JWT_COOKIE_SAMESITE = "None"
-    JWT_COOKIE_CSRF_PROTECT = True
+    JWT_COOKIE_CSRF_PROTECT = False
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=59)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
     JWT_SESSION_COOKIE = False
-    JWT_CSRF_HEADER_NAME = "X-CSRF-TOKEN"
 
     # cors configurations
     CORS_ORIGIN = os.getenv("FRONTEND_ORIGIN")
