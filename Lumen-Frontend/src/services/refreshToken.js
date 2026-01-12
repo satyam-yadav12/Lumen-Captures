@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { getCookie } from "./AxiosInstance";
 
 const axiosApi = axios.create({
     baseURL: import.meta.env.VITE_API_URL, // your backend URL
@@ -32,6 +32,26 @@ const processQueue = (error, data = null) => {
     failedQueue = [];
 };
 
+
+api.interceptors.request.use(
+    (config) => {
+        const method = config.method?.toUpperCase();
+
+
+        if (["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
+            const csrfToken = getCookie("csrf_access_token");
+
+            if (csrfToken) {
+                config.headers["X-CSRF-TOKEN"] = csrfToken;
+            }
+        }
+
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
+
 axiosApi.interceptors.response.use(
     res => res,
     async (error) => {
@@ -55,7 +75,11 @@ axiosApi.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                await api.post("/refresh/action");
+                await api.post("/refresh/action", {}, {
+                    headers: {
+                        "X-CSRF-TOKEN": getCookie("csrf_refresh_token"),
+                    },
+                });
                 processQueue(null);
                 return axiosApi(originalRequest);
 

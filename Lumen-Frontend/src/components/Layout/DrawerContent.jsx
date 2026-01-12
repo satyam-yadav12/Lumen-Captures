@@ -62,6 +62,32 @@ const DrawerContent = ({ isActive, toggleDrawer }) => {
         <div className="bg-gray-400 dark:h-1">
           <Divider />
         </div>
+
+        <Link to={"/feedback"}>
+          <ListItem
+            key={"Feedback"}
+            onClick={toggleDrawer(false)}
+            disablePadding
+          >
+            <ListItemButton>
+              {" "}
+              <ListItemText primary={"Feedback"} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Link to={"/about"}>
+          <ListItem
+            key={"About"}
+            onClick={toggleDrawer(false)}
+            disablePadding
+          >
+            <ListItemButton>
+              {" "}
+              <ListItemText primary={"About"} />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+
         <List>
 
           <ListItem disablePadding>

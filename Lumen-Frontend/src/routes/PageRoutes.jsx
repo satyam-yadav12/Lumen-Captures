@@ -15,6 +15,7 @@ import Explore from "../pages/Explore";
 import Terms from "../pages/Terms";
 import UpdateImage from "../pages/UpdateImage";
 import PrivateRoute from "../components/PrivateRoute";
+import PrivacyPolicy from "../pages/PrivacyPolicy";
 const PageRoutes = () => {
   return (
     <>
@@ -36,6 +37,7 @@ const PageRoutes = () => {
           <Route path="register" element={<Register />} />
           <Route path="explore/:query" element={<Explore />} />
           <Route path="terms" element={<Terms />} />
+          <Route path="privacy-policy" element={<PrivacyPolicy />} />
           <Route path="*" element={"Not found"} />
         </Route>
       </Routes>

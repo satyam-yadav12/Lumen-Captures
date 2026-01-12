@@ -31,11 +31,6 @@ export default function PrivateRoute({ children }) {
 
 
 
-    // useEffect(() => {
-    //     if (!isAuthenticated && !loading) {
-    //         setMessage("user not found login again")
-    //     }
-    // }, [loading])
 
     return isAuthenticated ? children : <Navigate to="/login" replace />;
 }

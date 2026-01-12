@@ -65,23 +65,21 @@ export default function ImageMenuButton({ TextValues, data }) {
 
       window.location.reload()
       setMessage("image deleted")
-      console.log(response)
+      // console.log(response)
     }
     catch (error) {
-      console.log(error)
+      // console.log(error)
       setMessage("request failed")
     }
 
   })
   const reportImage = (async (id) => {
     const payload = {
-      reason: "Image report detected (auto)"
+      "reason": "Image report detected (auto)"
     }
     try {
       const response = await reportImageContent(id, payload)
-
-
-      console.log(response)
+      // console.log(response)
       setMessage('Image sent for review')
     }
     catch (error) {

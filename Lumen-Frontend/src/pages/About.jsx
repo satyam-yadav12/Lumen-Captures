@@ -41,7 +41,14 @@ const About = () => {
           </p>
           <p className="text-gray-800 dark:text-gray-100 text-left">
             The source code of this project is licensed under the{" "}
-            <a href={import.meta.env.VITE_LICENSE_URL} className="text-blue-600 underline">MIT License</a>. For information regarding user content, image usage, and platform policies, please see our <a href="/terms" className="text-blue-600 underline">Terms & Conditions</a>
+            <a href={import.meta.env.VITE_LICENSE_URL} className="text-blue-600 underline">MIT License</a>. For information regarding user content, image usage, and platform policies, please see our <a href="/terms" className="text-blue-600 underline">Terms & Conditions</a>{" "}
+            and{" "}
+            <a
+              href="/privacy-policy"
+              className="text-blue-600 underline dark:text-blue-400"
+            >
+              Privacy Policy
+            </a>.
           </p>
         </section>
 

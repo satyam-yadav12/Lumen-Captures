@@ -1,5 +1,5 @@
 import { Button, CircularProgress } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginWithLumen } from "../services/authApi";
 import { AuthContext } from "../context/AuthContext";
@@ -14,6 +14,13 @@ const Login = () => {
   const { setMessage } = useContext(AlertContext)
   const [formData, setFormData] = useState({ Email: "", Password: "" })
   const [disableSubmit, setDisableSubmit] = useState(false)
+
+  useEffect(() => {
+    console.log("mounted")
+    if (user) {
+      navigate("/")
+    }
+  }, [user])
 
   const handleLogin = (async () => {
     setDisableSubmit(() => true)
@@ -36,6 +43,7 @@ const Login = () => {
     setDisableSubmit(() => false)
 
   });
+
   return (
     <>
       {/* <Notification message={message} setMessage={changeNotification} /> */}

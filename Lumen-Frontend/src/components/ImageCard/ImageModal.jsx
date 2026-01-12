@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { find_specific_img } from "../../services/userContent-Profile"
+import ImageCredit from "../ImageCredit";
 
 const ImageModal = ({ photo, show, createModal }) => {
   const [imgUrl, setImgUrl] = useState(null);
@@ -11,9 +12,11 @@ const ImageModal = ({ photo, show, createModal }) => {
   });
 
   useEffect(() => {
+
     setImgUrl(photo.img_url)
 
     async function fetchImage() {
+      if (!photo.img_id) return;
       const response = await find_specific_img(photo.img_id)
       // console.log(response)
 
@@ -57,7 +60,7 @@ const ImageModal = ({ photo, show, createModal }) => {
               >
                 ×
               </button>
-              <p>{photo.img_id}</p>
+
 
               <div className="w-full text-justify">
                 <p className="p-2 font-mono font-semibold">
@@ -70,7 +73,7 @@ const ImageModal = ({ photo, show, createModal }) => {
                   {imageDetails.description}
                 </p>
                 <p className="p-2 font-mono font-medium">
-                  {imageDetails.source == "unsplash" ? "Image credit : unsplash.com" : ""}
+                  {imageDetails.source == "unsplash" ? <ImageCredit username={imageDetails.username} /> : ""}
                 </p>
               </div>
             </div>

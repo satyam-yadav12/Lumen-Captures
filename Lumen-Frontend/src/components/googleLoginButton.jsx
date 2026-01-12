@@ -12,11 +12,11 @@ const GoogleLoginButton = () => {
         }
         let message;
         try {
-            window.location.href = "http://localhost:5000/google/login";
+            window.location.href = import.meta.env.VITE_OAUTH_URL;
             message = "Redirecting to google login"
         }
         catch (error) {
-            console.log(error)
+            // console.log(error)
             message = 'login failed'
         }
         finally {
