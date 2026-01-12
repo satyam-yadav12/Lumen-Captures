@@ -18,6 +18,7 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=59)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
     JWT_SESSION_COOKIE = False
+    JWT_CSRF_HEADER_NAME = "X-CSRF-TOKEN"
 
     # cors configurations
     CORS_ORIGIN = os.getenv("FRONTEND_ORIGIN")
