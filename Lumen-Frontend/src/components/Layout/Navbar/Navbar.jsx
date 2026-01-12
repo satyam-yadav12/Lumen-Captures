@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
 import { Button, Drawer } from "@mui/material";
-import MenuIcon from "@Mui/icons-material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
 
 import Logo from "../../Logo/Index";
 
