@@ -3,7 +3,6 @@ from ..utils.db import (
     find_all_images,
     find_all_user_uploads,
     find_text_search_result,
-    find_total_count_of_text_results,
 )
 
 
@@ -22,13 +21,11 @@ def search_keyword():
 
     text_results = list(text_search_result)  # text search
 
-    total_results = find_total_count_of_text_results(keyword)  # text search
-
     return (
         jsonify(
             {
                 "result": text_results,
-                "count": total_results,
+                "count": "NA",
                 "keyword": keyword,
             }
         ),

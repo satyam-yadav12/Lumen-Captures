@@ -1,22 +1,23 @@
 from ..extensions import mongo
-from bson import ObjectId
+from bson.objectid import ObjectId
+from datetime import datetime
 
 
-# database name auth_student
+# database name user_details
 def search_by_email(email):
-    user_details = mongo.db.auth_student.find_one({"Email": email})
+    user_details = mongo.db.user_details.find_one({"Email": email})
 
     return user_details
 
 
 def search_by_username(username):
-    user_details = mongo.db.auth_student.find_one({"Username": username})
+    user_details = mongo.db.user_details.find_one({"Username": username})
 
     return user_details
 
 
 def insert_user_data(data):
-    insertion_id = mongo.db.auth_student.insert_one(data).inserted_id
+    insertion_id = mongo.db.user_details.insert_one(data).inserted_id
     return insertion_id
 
 
@@ -24,33 +25,33 @@ def update_user_data(email, data):
     user_details = search_by_email(email)
     if not user_details:
         raise ValueError("email not registered")
-    mongo.db.auth_student.update_one({"Email": email}, {"$set": data})
+    mongo.db.user_details.update_one({"Email": email}, {"$set": data})
 
 
 def update_without_search(email, data):
-    mongo.db.auth_student.update_one({"Email": email}, {"$set": data})
+    mongo.db.user_details.update_one({"Email": email}, {"$set": data})
 
 
 def delete_user(email):
     exist = search_by_email(email)
     if exist:
-        mongo.db.auth_student.delete_one({"Email": email})
+        mongo.db.user_details.delete_one({"Email": email})
     return
 
 
-# database name user_imgs #used nowhere
+# database name user_images
 def search_for_img_name(public_name):
     img_details = mongo.db.user_imgs.find_one({"img_id": public_name})
     return img_details
 
 
 def insert_img_data(data):
-    insertion_id = mongo.db.user_imgs.insert_one(data).inserted_id
+    insertion_id = mongo.db.user_images.insert_one(data).inserted_id
     return insertion_id
 
 
 def update_image_details_in_db(img_id, update_data):
-    mongo.db.user_imgs.update_one({"img_id": img_id}, {"$set": update_data})
+    mongo.db.user_images.update_one({"img_id": img_id}, {"$set": update_data})
     return {"msg": "success"}
 
 
@@ -62,24 +63,35 @@ def search_for_user_uploads(user, cursor, limit):
         }
     else:
         query = {"username": user}
+    projection = {
+        "img_id": 1,
+        "img_url": 1,
+        "thumb_url": 1,
+        "_id": 1,
+        "username": 1,
+        "photo_height": 1,
+        "photo_width": 1,
+    }
     limit = int(limit)
-    result = mongo.db.user_imgs.find(query).sort({"_id": -1}).limit(limit)
-    count = mongo.db.user_imgs.count_documents({"username": user})
+    result = mongo.db.user_images.find(query, projection).sort({"_id": -1}).limit(limit)
+    count = "NA"
     return result, count
 
 
 def update_Like_counts_in_img(img_id):
-    mongo.db.user_imgs.update_one({"img_id": img_id}, {"$inc": {"count_of_likes": 1}})
+    mongo.db.user_images.update_one({"img_id": img_id}, {"$inc": {"count_of_likes": 1}})
     return True
 
 
 def decrement_Like_count_in_img(img_id):
-    mongo.db.user_imgs.update_one({"img_id": img_id}, {"$inc": {"count_of_likes": -1}})
+    mongo.db.user_images.update_one(
+        {"img_id": img_id}, {"$inc": {"count_of_likes": -1}}
+    )
     return True
 
 
 def delete_image_details(img_id):
-    mongo.db.user_imgs.delete_one({"img_id": img_id})
+    mongo.db.user_images.delete_one({"img_id": img_id})
     return {"msg": "success"}
 
 
@@ -89,34 +101,27 @@ def find_all_user_uploads(cursor, limit):
     else:
         query = {"source": "lumen"}
 
+    projection = {
+        "img_id": 1,
+        "img_url": 1,
+        "thumb_url": 1,
+        "_id": 1,
+        "username": 1,
+        "photo_height": 1,
+        "photo_width": 1,
+    }
     limit = int(limit)
-    result = mongo.db.user_imgs.find(query).sort({"_id": -1}).limit(limit)
-    count = mongo.db.user_imgs.count_documents({"source": "lumen"})
+    result = mongo.db.user_images.find(query, projection).sort({"_id": -1}).limit(limit)
+    count = "NA"
     return result, count
 
+
 def find_specific_img(img_id):
-    result = mongo.db.user_imgs.find_one({"img_id": img_id})
+    result = mongo.db.user_images.find_one({"img_id": img_id})
     return result
 
+
 # search related queries
-
-
-# def find_search_results_title(keyword, skip, limit):
-#     result = (
-#         mongo.db.user_imgs.find({"title": {"$regex": keyword, "$options": "i"}})
-#         .skip(skip)
-#         .limit(limit)
-#     )
-#     return result
-
-
-# def find_search_results_tags(keyword, skip, limit):
-#     result = (
-#         mongo.db.user_imgs.find({"tags": {"$regex": keyword, "$options": "i"}})
-#         .skip(skip)
-#         .limit(limit)
-#     )
-#     return result
 
 
 # updated search on index
@@ -127,31 +132,22 @@ def find_text_search_result(keyword, cursor, limit):
     else:
         query = {"$text": {"$search": keyword}}
 
+    projection = {
+        "img_id": 1,
+        "img_url": 1,
+        "thumb_url": 1,
+        "_id": 1,
+        "username": 1,
+        "photo_height": 1,
+        "photo_width": 1,
+    }
     limit = int(limit)
 
-    results = mongo.db.user_imgs.find(query).sort({"_id": -1}).limit(limit)
+    results = (
+        mongo.db.user_images.find(query, projection).sort({"_id": -1}).limit(limit)
+    )
 
     return results
-
-
-def find_total_count_of_text_results(keyword):
-    result = mongo.db.user_imgs.count_documents({"$text": {"$search": keyword}})
-    return result
-
-
-# use index based text search
-# def find_total_count_of_results_title(keyword):
-#     result = mongo.db.user_imgs.count_documents(
-#         {"title": {"$regex": keyword, "$options": "i"}}
-#     )
-#     return result
-
-
-# def find_total_count_of_results_tag(keyword):
-#     result = mongo.db.user_imgs.count_documents(
-#         {"tags": {"$regex": keyword, "$options": "i"}}
-#     )
-#     return result
 
 
 def find_all_images(cursor, limit):
@@ -160,9 +156,19 @@ def find_all_images(cursor, limit):
     else:
         query = {}
 
+    projection = {
+        "img_id": 1,
+        "img_url": 1,
+        "thumb_url": 1,
+        "_id": 1,
+        "username": 1,
+        "photo_height": 1,
+        "photo_width": 1,
+    }
+
     limit = int(limit)
-    result = mongo.db.user_imgs.find(query).sort({"_id": -1}).limit(limit)
-    count = mongo.db.user_imgs.count_documents({})
+    result = mongo.db.user_images.find(query, projection).sort({"_id": -1}).limit(limit)
+    count = "NA"
     return result, count
 
 
@@ -183,13 +189,16 @@ def search_collection_of_user(user, cursor, limit):
         match_stage["_id"] = {"$lt": ObjectId(cursor)}
 
     limit = int(limit)
-    response = mongo.db.user_imgs.aggregate(
+    response = mongo.db.user_images.aggregate(
         [
             {
                 "$lookup": {
                     "from": "user_collection",
-                    "localField": "img_id",
-                    "foreignField": "img_id",
+                    "let": {"img_id": "$img_id"},
+                    "pipeline": [
+                        {"$match": {"$expr": {"$eq": ["$img_id", "$$img_id"]}}},
+                        {"$project": {"_id": 0, "username": 1}},
+                    ],
                     "as": "user",
                 }
             },
@@ -197,6 +206,17 @@ def search_collection_of_user(user, cursor, limit):
             {"$match": match_stage},
             {"$sort": {"_id": -1}},
             {"$limit": limit},
+            {
+                "$project": {
+                    "_id": 1,
+                    "img_id": 1,
+                    "img_url": 1,
+                    "thumb_url": 1,
+                    "photo_height": 1,
+                    "photo_width": 1,
+                    "username": "$user.username",
+                }
+            },
         ]
     )
     result = list(response)
@@ -268,5 +288,7 @@ def revoke_refresh_token(token):
 
 
 def save_new_jti(token):
-    mongo.db.jti_validation.insert_one({"jti": token, "valid": True})
+    mongo.db.jti_validation.insert_one(
+        {"jti": token, "valid": True, "created_at": datetime.now()}
+    )
     return True

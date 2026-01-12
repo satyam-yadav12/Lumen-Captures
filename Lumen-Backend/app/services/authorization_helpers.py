@@ -81,16 +81,7 @@ def generate_and_set_tokens(user_details, additional):
         {"jti": jti, "valid": True}
     ).inserted_id  # replace mongo query with utils function
 
-    resp = jsonify(
-        {
-            "msg": "login successful",
-            "user name": user_details["Username"],
-            "access_toke": access_token,
-            "refresh_token": refresh_token,
-            "jti": jti,
-            "jti id": jti_id,
-        }
-    )
+    resp = jsonify({"msg": "login successful", "user name": user_details["Username"]})
 
     set_access_cookies(resp, access_token)
     set_refresh_cookies(resp, refresh_token)

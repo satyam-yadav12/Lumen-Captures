@@ -1,22 +1,34 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { find_specific_img } from "../../services/userContent-Profile"
 
-
-const ImageModal = ({ id, show, setShow }) => {
+const ImageModal = ({ photo, show, createModal }) => {
   const [imgUrl, setImgUrl] = useState(null);
   const [imageDetails, setImageDetails] = useState({
     author: "",
     title: "",
     description: "",
+    source: "",
   });
 
   useEffect(() => {
-    setImgUrl(id.photo_image_url || id.secure_url)
-    setImageDetails({
-      author: id.photographer_username || id.username,
-      title: id.ai_description || id.title,
-      description: id.photo_description || id.description,
-    });
-  }, [id]);
+    setImgUrl(photo.img_url)
+
+    async function fetchImage() {
+      const response = await find_specific_img(photo.img_id)
+      // console.log(response)
+
+
+      setImageDetails({
+        author: response.data.result.username,
+        title: response.data.result.title,
+        description: response.data.result.description,
+        source: response.data.result.source || "unsplash"
+      });
+    }
+    fetchImage()
+
+
+  }, [photo]);
 
 
 
@@ -25,7 +37,7 @@ const ImageModal = ({ id, show, setShow }) => {
       {show && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 no-scrollbar"
-          onClick={() => setShow(false)}
+          onClick={() => createModal(false)}
         >
           <div
             className="dark:bg-black/70 relativew-full md:w-[90%]  h-[90%] max-h-[90vh] bg-white/70 rounded-2xl shadow-xl overflow-y-auto p-4 no-scrollbar"
@@ -41,11 +53,11 @@ const ImageModal = ({ id, show, setShow }) => {
               {/* close button top-right */}
               <button
                 className=" fixed top-12 md:right-25 right-8 text-5xl font-bold dark:text-white"
-                onClick={() => setShow(false)}
+                onClick={() => createModal(false)}
               >
                 ×
               </button>
-              <p>{id.photo_id || id.img_id}</p>
+              <p>{photo.img_id}</p>
 
               <div className="w-full text-justify">
                 <p className="p-2 font-mono font-semibold">
@@ -56,6 +68,9 @@ const ImageModal = ({ id, show, setShow }) => {
                 </p>
                 <p className="p-2 font-mono font-medium">
                   {imageDetails.description}
+                </p>
+                <p className="p-2 font-mono font-medium">
+                  {imageDetails.source == "unsplash" ? "Image credit : unsplash.com" : ""}
                 </p>
               </div>
             </div>

@@ -27,10 +27,10 @@ const ImageOverlay = ({ createModal, setShowUri, data, handleLike, like, TextVal
         </div>
         <div className="flex flex-row h-[20%] p-2 ">
           <p className="h-full w-max  px-2 mr-auto shadow-2xl">
-            {data.photographer_username || data.username}
+            {data.username}
           </p>
 
-          {like.includes(`${data.photo_id || data.img_id}`) ? (
+          {like.includes(`${data.img_id}`) ? (
             <img
               src="https://img.icons8.com/?size=64&id=aId5rVASLwDE&format=png"
               alt="like"
@@ -38,7 +38,7 @@ const ImageOverlay = ({ createModal, setShowUri, data, handleLike, like, TextVal
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                handleLike(data.photo_id || data.img_id);
+                handleLike(data.img_id);
               }}
             />
           ) : (
@@ -49,7 +49,7 @@ const ImageOverlay = ({ createModal, setShowUri, data, handleLike, like, TextVal
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                handleLike(data.photo_id || data.img_id);
+                handleLike(data.img_id);
               }}
             />
           )}

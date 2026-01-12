@@ -40,7 +40,7 @@ const Developer = () => {
 
         {/* Footer */}
         <footer className="pt-12 border-t text-sm text-gray-500  text-left">
-          © 2025 SATYAM YADAV. All rights reserved.
+          © 2026 SATYAM YADAV. All rights reserved.
         </footer>
       </main>
     </div>

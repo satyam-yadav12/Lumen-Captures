@@ -41,8 +41,18 @@ def upload_new_img():
                 img_width = cloudinary_response["img_width"]
 
             if Uri and folder:
+                thumb_uri = Uri.replace(
+                    "/upload/", "/upload/w_400,c_fill,f_auto,q_auto/"
+                )
                 img_collection_data = create_img_data_to_upload(
-                    img_data, Uri, folder, username, img_id, img_height, img_width
+                    img_data,
+                    thumb_uri,
+                    Uri,
+                    folder,
+                    username,
+                    img_id,
+                    img_height,
+                    img_width,
                 )
 
             if img_collection_data:
@@ -127,6 +137,5 @@ def delete_user_img(id):
 
 
 def find_img(id):
-    user = get_jwt()["username"]
     result = find_specific_img(id)
     return jsonify({"msg": "image fetch successful", "result": result}), 200

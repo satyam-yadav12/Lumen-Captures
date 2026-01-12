@@ -21,7 +21,7 @@ const SearchBar = () => {
         <img
           src="https://cdn-icons-png.flaticon.com/128/54/54481.png"
           alt="Q"
-          className="border border-gray-400 border-l-0 p-3 absolute h-[50px] rounded-r-3xl inline mx-0 md:mt-2 outline-0  bg-gray-100 w-max"
+          className="border border-gray-400 border-l-0 p-3 absolute h-[50px] rounded-r-3xl inline mx-0 md:mt-2 outline-0  bg-gray-100 w-max shadowtransition duration-150 ease-in-out active:bg-gray-300 active:shadow-inner active:scale-95"
           onClick={SearchKeyword}
         />
       </div>

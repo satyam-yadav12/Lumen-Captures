@@ -2,14 +2,19 @@ import axios from "axios";
 
 
 const axiosApi = axios.create({
-    baseURL: "http://localhost:5000", // your backend URL
+    baseURL: import.meta.env.VITE_API_URL, // your backend URL
     withCredentials: true              // send HttpOnly cookies automatically
 });
+
+const api = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+    withCredentials: true
+})
 const PUBLIC_ROUTES = [
     "/login",
     "/register",
-
-    "/lumen/search"
+    "/lumen/search",
+    "/likes"
 ];
 
 let isRefreshing = false;
@@ -50,7 +55,7 @@ axiosApi.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                await axiosApi.post("/refresh/action");
+                await api.post("/refresh/action");
                 processQueue(null);
                 return axiosApi(originalRequest);
 
@@ -60,6 +65,7 @@ axiosApi.interceptors.response.use(
                 if (!originalRequest.meta?.allowUnauth) {
                     window.location.href = "/login";
                 }
+
 
                 return Promise.reject(err);
 

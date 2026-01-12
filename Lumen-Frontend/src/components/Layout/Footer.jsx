@@ -52,7 +52,7 @@ const Footer = () => {
               })}
             </div>
             <p className="p-2 pt-0 text-left md:text-center font-extralight">
-              Copyright resevered © Satyam Yadav 2025
+              Copyright resevered © Satyam Yadav 2026
             </p>
           </div>
           {/* links */}

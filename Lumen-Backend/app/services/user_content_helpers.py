@@ -26,7 +26,9 @@ def generate_unique_name_for_img(title):
     return public_id
 
 
-def create_img_data_to_upload(data, Url, folder, user, img_id, height, width):
+def create_img_data_to_upload(
+    data, thumb_uri, Url, folder, user, img_id, height, width
+):
     img_data = {
         "img_id": img_id,
         "username": user,
@@ -34,7 +36,8 @@ def create_img_data_to_upload(data, Url, folder, user, img_id, height, width):
         "description": data["description"],
         "tags": data["tags"],
         "source": "lumen",
-        "secure_url": Url,
+        "img_url": Url,
+        "thumb_url": thumb_uri,
         "photo_height": height,
         "photo_width": width,
         "cloudinary_details": {

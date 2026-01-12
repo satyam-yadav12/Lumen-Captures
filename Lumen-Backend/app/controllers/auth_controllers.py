@@ -27,7 +27,9 @@ def register():
             upload_results = upload_profile_image(img, username)
             if upload_results["Url"]:
                 profile_img_url = upload_results["Url"]
-
+        profile_img_url = profile_img_url.replace(
+            "/upload/", "/upload/w_400,h_400,c_fill,f_auto,q_auto/"
+        )
         if validate_data and username:
             user_details = create_user_data(data, username, profile_img_url)
             insertion = insert_user_data(user_details)

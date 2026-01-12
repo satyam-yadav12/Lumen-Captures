@@ -5,13 +5,15 @@ import { AlertProvider } from "./AlertMessage"
 
 const AppProvider = (({ children }) => {
     return <BrowserRouter>
-        <AuthProvider>
-            <ThemeProvider>
-                <AlertProvider>
+        <AlertProvider>
+            <AuthProvider>
+                <ThemeProvider>
+
                     {children}
-                </AlertProvider>
-            </ThemeProvider>
-        </AuthProvider>
+
+                </ThemeProvider>
+            </AuthProvider>
+        </AlertProvider>
     </BrowserRouter>
 })
 

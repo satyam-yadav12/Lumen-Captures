@@ -65,7 +65,7 @@ const UpdateImage = () => {
         let payload = {
             title: imageDetails.title,
             description: imageDetails.description,
-            tags: JSON.stringify(imageDetails['tags'])
+            tags: JSON.stringify(imageDetails['tags'])  || ""
         }
 
 

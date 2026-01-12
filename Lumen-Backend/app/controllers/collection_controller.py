@@ -49,6 +49,7 @@ def get_collection_of_user():
     limit = request.args.get("limit") or 21
     claims = get_jwt()
     user_name = claims.get("username")
+
     if not user_name:
         return jsonify({"msg": "aunauthorize"}), 401
     collection = search_collection_of_user(user_name, cursor, limit)

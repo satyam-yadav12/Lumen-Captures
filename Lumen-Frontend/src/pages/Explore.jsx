@@ -5,21 +5,30 @@ import useImagePagination from '../hooks/useImagePagination'
 
 const Explore = () => {
 
-  const { images, loading, hasMore, page, setPage, request, cursor } = useImagePagination()
+  const { images, loading, hasMore, page, setPage, request, cursor, setCursor, setImages, setHasMore } = useImagePagination()
 
 
   const { query } = useParams()
 
+  useEffect(() => {
 
+    setCursor("")
+    setImages([])
+    setHasMore(true)
+    setPage(Number(!page))
+
+
+  }, [query])
 
   useEffect(() => {
+    
     const fetchImages = (async () => {
       const response = await request({ url: `/lumen/search?q=${query}&cursor=${cursor}&limit=${10}`, method: "GET" })
       // console.log(response)
     })
     fetchImages()
 
-  }, [page, query])
+  }, [page])
 
   return (
     <div>

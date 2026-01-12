@@ -3,11 +3,9 @@ import React, { useState } from "react";
 
 const ImagePlace = ({
   data,
-  index,
   createModal,
   setShowUri,
-  photos,
-  lastImageRef,
+
 }) => {
   const [loaded, setLoaded] = useState(false);
   return (
@@ -21,10 +19,10 @@ const ImagePlace = ({
           </div>
         )}
         <img
-          src={data.photo_image_url || data.secure_url}
+          src={data.thumb_url}
           alt="img"
-          ref={data.img_id == photos ? lastImageRef : null}
-          id={data.photo_id || data.img_id}
+
+          id={data.img_id}
           loading="lazy"
           className={` object-cover bg-gray-200 m-auto rounded-xl min-h-30 w-full transition-opacity duration-500 
      ${loaded ? "opacity-100" : "opacity-0"} 

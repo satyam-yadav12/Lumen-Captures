@@ -186,7 +186,7 @@ const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download
 
     <div>
       <div>
-        <ImageModal id={showUri} show={show} setShow={createModal} />
+        <ImageModal photo={showUri} show={show} createModal={createModal} />
         {/* change names and prop names */}
       </div>
       <div className='flex flex-row gap-4 px-4'>
@@ -196,7 +196,7 @@ const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download
             {val.map((data, index) => {
               return (
                 <div
-                  key={data.photo_id || data.img_id}
+                  key={data.img_id}
                   className={`group  hover:opacity-98 relative break-inside-avoid overflow-hidden rounded-xl my-4 h-max w-[90vw] sm:w-[45vw] lg:w-[30vw] `}
 
                 >

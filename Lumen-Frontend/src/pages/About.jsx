@@ -16,10 +16,12 @@ const About = () => {
         <section className="mb-8">
           <h2 className="text-2xl font-bold mb-2 text-left">1. Our Principles</h2>
           <p className="text-gray-800 dark:text-gray-100 my-2 text-left">
-            We respect the rights of content creators. User-uploaded images remain the property of their authors. Sample images from Unsplash are used under the Unsplash License for demonstration purposes, with proper attribution displayed where applicable.
+            We respect the rights of content creators. User-uploaded images remain the property of their authors.
+
+
           </p>
           <p className="text-gray-800 dark:text-gray-100 text-left my-2">
-            Inappropriate content, including sexually explicit material, is not allowed and may be removed. User data, including name, email, and profile picture, is collected solely to provide platform functionality and is never shared with third parties.
+            Lumen Captures uses a curated selection of images sourced from Unsplash to enhance discovery, inspiration, and exploration features within the platform. All Unsplash images displayed in this application remain the property of their respective photographers and are licensed under the Unsplash License. Lumen Captures does not claim ownership of any Unsplash images and does not sell, sublicense, or redistribute Unsplash content as a dataset or collection. Images are presented individually for viewing and download, in accordance with Unsplash’s licensing terms. Downloaded images are intended for personal or commercial use as permitted by the Unsplash License, and users are responsible for complying with any applicable rights, including model or property releases. Whenever possible, attribution to the original photographer and Unsplash is provided and encouraged.
           </p>
         </section>
 
@@ -39,16 +41,16 @@ const About = () => {
           </p>
           <p className="text-gray-800 dark:text-gray-100 text-left">
             The source code of this project is licensed under the{" "}
-            <a href="https://github.com/satyam-yadav12/Lumen-Captures/blob/main/LICENSE" className="text-blue-600 underline">MIT License</a>. For information regarding user content, image usage, and platform policies, please see our <a href="/terms" className="text-blue-600 underline">Terms & Conditions</a>
+            <a href={import.meta.env.VITE_LICENSE_URL} className="text-blue-600 underline">MIT License</a>. For information regarding user content, image usage, and platform policies, please see our <a href="/terms" className="text-blue-600 underline">Terms & Conditions</a>
           </p>
         </section>
 
         {/* Footer */}
         <footer className="pt-12 border-t text-sm text-gray-500 text-left">
-          © 2025 Lumen Captures. All rights reserved.
+          © 2026 Lumen Captures. All rights reserved.
         </footer>
       </main>
-    </div>
+    </div >
   );
 };
 

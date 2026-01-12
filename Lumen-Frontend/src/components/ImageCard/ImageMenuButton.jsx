@@ -18,8 +18,8 @@ export default function ImageMenuButton({ TextValues, data }) {
     setAnchorEl(null);
   };
   React.useEffect(() => {
-    if (data && (data.photo_image_url || data.secure_url)) {
-      setImg(data.photo_image_url || data.secure_url)
+    if (data && (data.img_url || data.secure_url)) {
+      setImg(data.img_url || data.secure_url)
       setImg_id(data.img_id)
     }
 

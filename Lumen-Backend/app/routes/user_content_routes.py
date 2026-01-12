@@ -12,7 +12,7 @@ from ..controllers.user_content import (
     get_user_uploads,
     update_img_details,
     delete_user_img,
-    find_img
+    find_img,
 )
 
 user_profile_bp = Blueprint("user", __name__)
@@ -65,11 +65,7 @@ def edit_img_data(id):
 def delete_img_data(id):
     return delete_user_img(id)
 
+
 @user_profile_bp.route("/uploads/<id>", methods=["GET"])
-@jwt_required()
 def fetch_img(id):
     return find_img(id)
-
-
-
-
