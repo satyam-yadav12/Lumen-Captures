@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-import mock_images from "../../assets/photos_extracted.json";
+
 import ImageActionBar from "./ImageActionBar";
 import ImageOverlay from "./ImageOverlay";
 import ImageModal from "./ImageModal";
@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom"
 import { AlertContext } from "../../context/AlertMessage";
 import useColumnCount from "../../hooks/useColumnCount";
 
-const Image = ({ images = mock_images, TextValues = ['Report Content', 'Download'], hasMore, loading, page, setPage }) => {
+const Image = ({ images, TextValues = ['Report Content', 'Download'], hasMore, loading, page, setPage }) => {
   const colCount = useColumnCount()
   const { user, logout } = useContext(AuthContext)
   const { setMessage } = useContext(AlertContext)
