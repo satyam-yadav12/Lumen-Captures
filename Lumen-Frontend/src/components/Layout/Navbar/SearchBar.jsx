@@ -5,6 +5,7 @@ const SearchBar = () => {
   const [searchInput, setSearchInput] = useState("")
   const navigate = useNavigate()
   const SearchKeyword = () => {
+    setSearchInput("")
     navigate(`/explore/${searchInput}`)
   };
   return (
