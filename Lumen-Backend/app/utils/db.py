@@ -183,43 +183,27 @@ def delete_collection_data(user, img):
     return {"msg": "success"}
 
 
+# changed without cross checks
 def search_collection_of_user(user, cursor, limit):
-    match_stage = {"user.username": user}
+    limit = int(limit)
+
+    img_cursor = mongo.db.user_collection.find(
+        {"username": user}, {"img_id": 1, "_id": 0}
+    )
+
+    ids = [doc["img_id"] for doc in img_cursor]
+
+    if not ids:
+        return []
+
+    match_stage = {"img_id": {"$in": ids}}
+
     if cursor:
         match_stage["_id"] = {"$lt": ObjectId(cursor)}
 
-    limit = int(limit)
-    response = mongo.db.user_images.aggregate(
-        [
-            {
-                "$lookup": {
-                    "from": "user_collection",
-                    "let": {"img_id": "$img_id"},
-                    "pipeline": [
-                        {"$match": {"$expr": {"$eq": ["$img_id", "$$img_id"]}}},
-                        {"$project": {"_id": 0, "username": 1}},
-                    ],
-                    "as": "user",
-                }
-            },
-            {"$unwind": "$user"},
-            {"$match": match_stage},
-            {"$sort": {"_id": -1}},
-            {"$limit": limit},
-            {
-                "$project": {
-                    "_id": 1,
-                    "img_id": 1,
-                    "img_url": 1,
-                    "thumb_url": 1,
-                    "photo_height": 1,
-                    "photo_width": 1,
-                    "username": "$user.username",
-                }
-            },
-        ]
-    )
-    result = list(response)
+    result_cursor = mongo.db.user_images.find(match_stage).sort("_id", -1).limit(limit)
+
+    result = list(result_cursor)
 
     return result
 
