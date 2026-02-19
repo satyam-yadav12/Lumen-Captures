@@ -1,36 +1,37 @@
-import React, { useContext, useState } from "react";
 import { Button } from "@mui/material";
-import { updatePassword } from "../../services/userContent-Profile";
+import { useContext, useState } from "react";
 import { AlertContext } from "../../context/AlertMessage";
+import { updatePassword } from "../../services/userContent-Profile";
 
 const UpdatePassword = () => {
-  const { setMessage } = useContext(AlertContext)
-  const [passwords, setPasswords] = useState({ Password: "", ConfirmPassword: "" })
+  const { setMessage } = useContext(AlertContext);
+  const [passwords, setPasswords] = useState({
+    Password: "",
+    ConfirmPassword: "",
+  });
 
-  const updateUserPassword = (async () => {
+  const updateUserPassword = async () => {
     // console.log(passwords)
     if (!(passwords.Password && passwords.ConfirmPassword)) {
-      setMessage("Password and Confirm Password fields must not be empty")
-      return
+      setMessage("Password and Confirm Password fields must not be empty");
+      return;
     } else if (passwords.Password != passwords.ConfirmPassword) {
-      setMessage("Password and Confirm Password fields must match")
-      return
+      setMessage("Password and Confirm Password fields must match");
+      return;
     }
     try {
-      const response = await updatePassword(passwords)
+      const response = await updatePassword(passwords);
       // console.log(response)
-      setMessage(response.msg)
+      setMessage(response.msg);
 
       setTimeout(() => {
-        window.location.reload()
+        window.location.reload();
       }, 300);
-
-    }
-    catch (error) {
+    } catch (error) {
       // console.log(error)
-      setMessage("request failed")
+      setMessage("request failed");
     }
-  })
+  };
   return (
     <div>
       <p className="m-auto p-2 md:hidden  mt-5 font-medium">
@@ -40,19 +41,33 @@ const UpdatePassword = () => {
         <input
           type="text"
           value={passwords.Password}
-          onChange={(e) => setPasswords((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
+          onChange={(e) =>
+            setPasswords((prev) => ({
+              ...prev,
+              [e.target.name]: e.target.value,
+            }))
+          }
           name="Password"
           className="bg-white dark:bg-gray-100  dark:text-black dark:font-medium border border-black p-1.5 mx-3 text-black focus:outline-none rounded-sm"
         />
         <input
           type="text"
           value={passwords.ConfirmPassword}
-          onChange={(e) => setPasswords((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
+          onChange={(e) =>
+            setPasswords((prev) => ({
+              ...prev,
+              [e.target.name]: e.target.value,
+            }))
+          }
           name="ConfirmPassword"
           className="bg-white dark:bg-gray-100 dark:text-black dark:font-medium border border-black p-1.5 mx-3 text-black focus:outline-none rounded-sm"
         />
         <div className="w-5/6 m-auto md:m-2 md:w-max md:h-full">
-          <Button variant="contained" color="secondary" onClick={updateUserPassword}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={updateUserPassword}
+          >
             Change Password
           </Button>
         </div>
