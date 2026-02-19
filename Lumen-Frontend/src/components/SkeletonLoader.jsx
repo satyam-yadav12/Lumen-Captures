@@ -1,5 +1,5 @@
 const SkeletonLoader = ({ colCount = 3, refProp }) => {
-  const randomHeights = [120, 300, 410, 90, 410, 176, 250, 300, 120];
+  const randomHeights = [250, 270, 320, 400, 420, 300];
   const boxes = Array.from({ length: 9 }, (_, i) => `box${i + 1}`);
 
   const getRandomHeight = () => {

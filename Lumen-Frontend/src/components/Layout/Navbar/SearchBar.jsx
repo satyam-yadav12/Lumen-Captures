@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AlertContext } from "../../../context/AlertMessage";
 
 const SearchBar = () => {
-  const [searchInput, setSearchInput] = useState("")
-  const navigate = useNavigate()
+  const [searchInput, setSearchInput] = useState("");
+  const navigate = useNavigate();
+  const { setMessage } = useContext(AlertContext);
   const SearchKeyword = () => {
-    setSearchInput("")
-    navigate(`/explore/${searchInput}`)
+    if (searchInput == "") {
+      setMessage("enter keyword to search");
+      return;
+    }
+    navigate(`/explore/${searchInput}`);
+    setSearchInput("");
   };
   return (
     <div className="w-full flex flex-col justify-start m-auto">
@@ -26,7 +32,6 @@ const SearchBar = () => {
           onClick={SearchKeyword}
         />
       </div>
-
     </div>
   );
 };

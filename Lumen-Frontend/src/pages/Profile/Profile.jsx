@@ -1,27 +1,29 @@
 import { Button } from "@mui/material";
-import React, { useEffect, useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AlertContext } from "../../context/AlertMessage";
+import { AuthContext } from "../../context/AuthContext";
+import {
+  editProfile,
+  getProfile,
+  updateProfilePicture,
+} from "../../services/userContent-Profile";
 import Uploads from "../Uploads";
 import UpdatePassword from "./UpdatePassword";
-import { editProfile, getProfile, updateProfilePicture } from "../../services/userContent-Profile";
-import { AuthContext } from "../../context/AuthContext";
-import { AlertContext } from "../../context/AlertMessage";
 
 const Profile = () => {
-  const { setMessage } = useContext(AlertContext)
+  const { setMessage } = useContext(AlertContext);
   const [disableEdit, setDisableEdit] = useState(true);
-  const { logout } = useContext(AuthContext)
+  const { logout } = useContext(AuthContext);
   const [profileData, setProfileData] = useState({
     Full_name: "",
     City: "",
 
     Username: "",
     Email: "",
-    Profile_picture: ""
+    Profile_picture: "",
   });
-  const [changePicture, setChangePicture] = useState(false)
-  const [storeFileToChange, setStoreFileToChange] = useState(null)
-
-
+  const [changePicture, setChangePicture] = useState(false);
+  const [storeFileToChange, setStoreFileToChange] = useState(null);
 
   useEffect(() => {
     let tempProfile = {
@@ -30,31 +32,29 @@ const Profile = () => {
 
       Username: "",
       Email: "",
-      Profile_picture: ""
-    }
-    const fetchProfileData = (async (tempProfile) => {
-      const response = await getProfile()
+      Profile_picture: "",
+    };
+    const fetchProfileData = async (tempProfile) => {
+      const response = await getProfile();
       // console.log(response)
-      const responseField = response.data["user details"]
+      const responseField = response.data["user details"];
       for (const key in tempProfile) {
         if (key in responseField) {
-          tempProfile[key] = responseField[key]
+          tempProfile[key] = responseField[key];
         }
       }
       // console.log(tempProfile)
-      setProfileData(tempProfile)
-    })
+      setProfileData(tempProfile);
+    };
     try {
-      fetchProfileData(tempProfile)
-    }
-    catch (error) {
+      fetchProfileData(tempProfile);
+    } catch (error) {
       if (error.response.status === 401) {
-        logout()
+        logout();
       }
       // console.log(error)
     }
-  }, [])
-
+  }, []);
 
   const openPicture = (e) => {
     console.log("Profile picture clicked:", e.target.src);
@@ -65,57 +65,59 @@ const Profile = () => {
     setDisableEdit(false);
   };
 
-  const saveChanges = (async () => {
+  const saveChanges = async () => {
     if (!(profileData.Full_name && profileData.City)) {
-      setMessage("field must not empty")
+      setMessage("field must not empty");
     }
     const payload = {
       Full_name: profileData.Full_name,
       City: profileData.City,
-
-    }
+    };
     // console.log(payload)
     try {
-      const response = await editProfile(payload)
+      const response = await editProfile(payload);
       // console.log(response)
-      setMessage('success')
+      setMessage("success");
     } catch (error) {
       // console.log(error)
-      setMessage("failed")
+      setMessage("failed");
     }
     setDisableEdit(true);
-  });
+  };
 
-  const handleFileUpload = (async (e) => {
-    const file = storeFileToChange
+  const handleFileUpload = async (e) => {
+    const file = storeFileToChange;
     if (!file) {
-      return
-
-    };
-    const url = (URL.createObjectURL(file))
+      return;
+    }
+    const url = URL.createObjectURL(file);
     setProfileData((prev) => ({ ...prev, Profile_picture: url }));
-    setChangePicture(false)
-    const payload = new FormData()
-    payload.append("Profile_picture", storeFileToChange)
+    setChangePicture(false);
+    const payload = new FormData();
+    payload.append("Profile_picture", storeFileToChange);
 
     try {
-      const response = await updateProfilePicture(payload)
+      const response = await updateProfilePicture(payload);
       // console.log(response)
-      setMessage("profile picture was changed")
+      setMessage("profile picture was changed");
     } catch (error) {
       // console.log(error)
-      setMessage("request failed")
+      setMessage("request failed");
     }
-  });
+  };
 
-  const handleFileChange = ((e) => {
-    e.target.files[0] ? setStoreFileToChange(e.target.files[0]) : setStoreFileToChange(null)
-  })
+  const handleFileChange = (e) => {
+    e.target.files[0]
+      ? setStoreFileToChange(e.target.files[0])
+      : setStoreFileToChange(null);
+  };
 
   return (
     <div>
       <div className="grid grid-cols-2 gap-2 w-full md:w-5/6 m-auto text-center my-7  border-b-2 border-gray-500 p-4">
-        <h1 className="text-2xl font-bold m-auto">{profileData.Username}</h1>
+        <h1 className="text-2xl font-bold m-auto">
+          {profileData.Username == "" ? "No user" : profileData.Username}
+        </h1>
         <div
           className={
             disableEdit ? "w-max text-center m-auto md:mr-auto p-2" : "hidden"
@@ -135,22 +137,34 @@ const Profile = () => {
                 : "https://cdn-icons-png.flaticon.com/128/149/149071.png"
             }
             alt="profile"
-            className="h-40 mt-5 w-max rounded-full ml-auto  mb-auto inline select-none border border-gray-300"
+            className="max-h-40 w-max  mt-5 rounded-full ml-auto  mb-auto inline select-none border border-gray-300"
             onClick={openPicture}
           />
 
-
-          {changePicture ?
-            (<div className="w-max my-5 flex flex-col">
-              <input type="file" onChange={(e) => handleFileChange(e)} className="border p-2 m-2 " />
+          {changePicture ? (
+            <div className="w-max my-5 flex flex-col z-50 ">
+              <input
+                type="file"
+                onChange={(e) => handleFileChange(e)}
+                className="border p-2 m-2 "
+              />
               <div className="z-50 m-auto w-max my-5  p-2 ">
-                <Button variant="outlined" onClick={handleFileUpload} >save</Button></div>
-            </div>) :
-            (<div className="w-max m-auto my-5">
-              <Button variant="outlined" color="primary" onClick={() => setChangePicture(true)}>
+                <Button variant="outlined" onClick={handleFileUpload}>
+                  save
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="w-max m-auto my-5">
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => setChangePicture(true)}
+              >
                 Change
               </Button>
-            </div>)}
+            </div>
+          )}
         </div>
 
         <div className=" text-left m-auto col-start-1 gap-0 w-full p-2 md:col-span-2">
@@ -202,7 +216,6 @@ const Profile = () => {
                 className="inline m-2 text-2xl font-semibold border p-2  pl-4"
               />
             </div>
-
           </div>
         </div>
         <div

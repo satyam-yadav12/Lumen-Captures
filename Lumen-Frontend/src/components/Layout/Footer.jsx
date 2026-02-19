@@ -1,23 +1,27 @@
-import React, { Fragment } from "react";
-import Logo from "../Logo/Index";
+import { Fragment } from "react";
 import { Link } from "react-router-dom";
+import Logo from "../Logo/Index";
 const Footer = () => {
   const SocialIcons = [
     {
       alt: "facebook",
-      url: "https://cdn-icons-png.flaticon.com/128/5968/5968764.png",
+      logo_url: "https://cdn-icons-png.flaticon.com/128/5968/5968764.png",
+      redirect_url: "https://github.com/satyam-yadav12",
     },
     {
       alt: "instagram",
-      url: "https://cdn-icons-png.flaticon.com/128/4138/4138124.png",
+      logo_url: "https://cdn-icons-png.flaticon.com/128/4138/4138124.png",
+      redirect_url: "https://instagram.com/satyam9_3",
     },
     {
       alt: "Youtube",
-      url: "https://cdn-icons-png.flaticon.com/128/4494/4494485.png",
+      logo_url: "https://cdn-icons-png.flaticon.com/128/4494/4494485.png",
+      redirect_url: "https://github.com/satyam-yadav12",
     },
     {
-      alt: "Pinterest",
-      url: "https://cdn-icons-png.flaticon.com/128/145/145808.png",
+      alt: "Github",
+      logo_url: "https://cdn-icons-png.flaticon.com/128/2111/2111432.png",
+      redirect_url: "https://github.com/satyam-yadav12/Lumen-Captures",
     },
   ];
   return (
@@ -46,7 +50,13 @@ const Footer = () => {
                     key={data.alt}
                     className="list-none cursor-pointer select-none p-2 "
                   >
-                    <img src={data.url} alt="data.alt" className="h-10 m-1" />
+                    <a href={data.redirect_url}>
+                      <img
+                        src={data.logo_url}
+                        alt="data.alt"
+                        className="h-10 m-1"
+                      />
+                    </a>
                   </li>
                 );
               })}
@@ -63,7 +73,7 @@ const Footer = () => {
                   <Link to={"/" + text.toLowerCase()}>
                     <li
                       key={text}
-                      className="list-none cursor-pointer p-2 rounded-sm font-semibold hover:bg-gray-300"
+                      className="list-none cursor-pointer p-2 rounded-sm font-semibold hover:bg-gray-500"
                     >
                       {text}
                     </li>
