@@ -28,6 +28,7 @@ Lumen-Frontend/
 │  
 ├── src/  
 │ ├── components/  
+<<<<<<< HEAD
 │ ├── pages/  
 │ ├── context/  
 │ ├── hooks/  
@@ -38,6 +39,24 @@ Lumen-Frontend/
 ├── public/  
 ├── .env  
 ├── package.json  
+=======
+│ ├── context/
+│ ├── hooks/  
+│ ├── pages/  
+│ ├── routes/  
+│ ├── services/  
+│ ├── App.css  
+│ ├── index.css  
+│ ├── main.jsx  
+│ └── App.jsx  
+│  
+├── index.html
+├── assets/  
+├── public/  
+├── package-lock.json  
+├── package.json  
+├── vite.config.js  
+>>>>>>> c48137b (add: readme files || skeleto.jsx || screenshots)
 └── README.md
 
 ## Setup Instruction
