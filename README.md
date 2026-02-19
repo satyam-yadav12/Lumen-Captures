@@ -1,84 +1,78 @@
-# 🌌 Lumen Captures – Backend
+# Lumen Captures
 
-**Lumen Captures** is the backend API powering an image-based platform where users can upload, manage, and explore public images.  
-It’s built using **Flask + MongoDB** with a focus on modular design, security, and scalability.
+[![React](https://img.shields.io/badge/React-17.0.2-blue?logo=react)](https://reactjs.org/)
+[![Flask](https://img.shields.io/badge/Flask-2.3.0-orange?logo=flask)](https://flask.palletsprojects.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.0-green?logo=mongodb)](https://www.mongodb.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.3.0-blue?logo=tailwind-css)](https://tailwindcss.com/)
+[![Material UI](https://img.shields.io/badge/Material%20UI-5.0-blueviolet?logo=mui)](https://mui.com/)
 
----
-
-## 🧠 Overview
-
-This backend handles:
-
-- 🔐 **JWT Authentication** (Access + Refresh)
-- 🧑‍💻 **User management** (profiles, passwords, avatars)
-- 🖼️ **Image upload & management**
-- 📦 **Collections and favorites**
-- 💬 **Feedback and reporting**
-- 🔍 **Image search and public discovery**
-
-All routes are protected using **JWT tokens** stored securely in HTTP-only cookies.
+Lumen Captures is a **portfolio image exploration and sharing platform** built with **Flask, React, MongoDB, Tailwind CSS, and Material UI**.  
+Users can upload, browse, like, and interact with images with secure JWT authentication, OAuth login, and infinite scrolling over a large dataset (~25k images).
 
 ---
 
-## ⚙️ Tech Stack
+## 🔹 Features
 
-| Layer          | Technology                      |
-| -------------- | ------------------------------- |
-| Framework      | Flask                           |
-| Database       | MongoDB (via PyMongo)           |
-| Authentication | flask-jwt-extended              |
-| Security       | Werkzeug password hashing, CORS |
-| Architecture   | Modular MVC-style               |
-| Deployment     | Render                          |
+- User registration, login, and OAuth authentication
+- JWT-based HttpOnly cookie sessions with refresh tokens
+- Upload, edit, delete images (user-owned)
+- Infinite scroll gallery (~25k images)
+- Like/Dislike system & “Liked Images” view
+- Feedback submission
+- Responsive mobile-first design
+- Dark/Light theme toggle
+- MIT license & Terms page
 
 ---
 
-<!-- ## 📁 Project Structure
+## 📂 Project Structure
 
-Lumen-Backend/
-│
-├── app/
-│ ├── controllers/ # Core business logic
-│ ├── middlewares/ # JWT auth & request validation
-│ ├── models/ # MongoDB schemas
-│ ├── routes/ # API route definitions
-│ ├── services/ # Helper modules (upload, search)
-│ ├── utils/ # Utility functions
-│ ├── config.py # App configuration
-│ ├── extensions.py # Flask extensions (JWT, DB, etc.)
-│ └── init.py # App factory
-│
-├── run.py # Entry point
-└── requirements.txt # Dependencies -->
+Lumen-Captures/  
+├─ Lumen-Backend/  
+├─ Lumen-Frontend/  
+├─ .gitignore  
+├─ LICENSE  
+└─ README.md
 
-## ⚡ Setup Instructions
+---
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/satyam-yadav12/Lumen-Captures.git
-cd Lumen-Captures/Lumen-Backend
+## ⚡ Getting Started
 
-# 2. Create a virtual environment
-python -m venv venv
+This project has **two parts**: backend and frontend. Each has its own setup instructions.  
+Please follow the links below for detailed guides:
 
-venv\Scripts\activate      # for Windows
+- [Backend Setup & API Docs](./Lumen-Backend/README.md)
+- [Frontend Setup & UI Docs](./Lumen-Frontend/README.md)
 
-# 3. Install dependencies
-pip install -r requirements.txt
+---
 
-# 4. Configure environment variables (.env)
-SECRET_KEY = "secret key for app"
-MONGO_URI="atlas connection string"
-JWT_SECRET_KEY="secret key for jwt"
-GOOGLE_CLIENT_ID= "your google client id"
-GOOGLE_CLIENT_SECRET= "google client secret"
-FRONTEND_ORIGIN="http://localhost:5173"
-CLOUDINARY_CLOUD_NAME="cloud name"
-CLOUDINARY_API_KEY="cloudinary api key"
-CLOUDINARY_API_SECRET="cloudinary api secret"
+## 🚀 Tech Stack
 
-# 5. Run the application
-python run.py
+| Layer            | Technology                          |
+| ---------------- | ----------------------------------- |
+| Frontend         | React, Tailwind CSS, Material UI    |
+| Backend          | Flask, PyMongo                      |
+| Database         | MongoDB                             |
+| Auth             | JWT (HttpOnly cookies), OAuth login |
+| Hosting          | Netlify, Render                     |
+| State Management | React Context API                   |
+| Pagination       | Cursor-based infinite scrolling     |
 
-Server runs at: http://127.0.0.1:5000
-```
+---
+
+## 🏗 Architecture Overview
+
+- Client: React SPA (Netlify)
+- API: Flask REST API (Render)
+- Auth: JWT Access + Refresh stored in HttpOnly cookies
+- Storage: Cloudinary for media
+- Database: MongoDB Atlas
+
+## ⚡ Live Demos:
+
+Frontend: [https://lumen-captures.netlify.app/](https://lumen-captures.netlify.app/)  
+Backend health check: [https://lumen-captures.onrender.com/healthz](https://lumen-captures.onrender.com/healthz)
+
+## ⚖️ License
+
+MIT License © 2026

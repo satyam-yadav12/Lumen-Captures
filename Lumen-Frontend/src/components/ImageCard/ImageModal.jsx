@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { find_specific_img } from "../../services/userContent-Profile"
 import ImageCredit from "../ImageCredit";
+import CircularProgress from "@mui/material/CircularProgress";
 
-const ImageModal = ({ photo, show, createModal }) => {
+const ImageModal = ({ photo = null, show, createModal }) => {
   const [imgUrl, setImgUrl] = useState(null);
   const [imageDetails, setImageDetails] = useState({
     author: "",
@@ -11,15 +12,22 @@ const ImageModal = ({ photo, show, createModal }) => {
     source: "",
   });
 
+
+  const closeImageModal = (() => {
+    setImgUrl(null)
+    createModal(false)
+  })
+
   useEffect(() => {
 
-    setImgUrl(photo.img_url)
+
 
     async function fetchImage() {
       if (!photo.img_id) return;
       const response = await find_specific_img(photo.img_id)
       // console.log(response)
 
+      setImgUrl(response.data.result.img_url)
 
       setImageDetails({
         author: response.data.result.username,
@@ -48,15 +56,20 @@ const ImageModal = ({ photo, show, createModal }) => {
           >
             {/* content */}
             <div className="flex flex-col items-center justify-start gap-4 pt-6 no-scrollbar">
-              <img
-                src={imgUrl}
-                alt="main img"
-                className="w-[98%] md:h-[70vh] object-contain"
-              />
+              {
+                imgUrl ? <img
+                  src={imgUrl}
+                  alt="main img"
+                  className="w-[98%] md:h-[70vh] object-contain"
+                /> : <div className="flex justify-center items-center m-auto">
+                  <CircularProgress size={40} />
+                </div>
+              }
+
               {/* close button top-right */}
               <button
                 className=" fixed top-12 md:right-25 right-8 text-5xl font-bold dark:text-white"
-                onClick={() => createModal(false)}
+                onClick={closeImageModal}
               >
                 ×
               </button>
@@ -73,7 +86,7 @@ const ImageModal = ({ photo, show, createModal }) => {
                   {imageDetails.description}
                 </p>
                 <p className="p-2 font-mono font-medium">
-                  {imageDetails.source == "unsplash" ? <ImageCredit username={imageDetails.username} /> : ""}
+                  {imageDetails.source == "unsplash" ? <ImageCredit username={imageDetails.author} /> : ""}
                 </p>
               </div>
             </div>

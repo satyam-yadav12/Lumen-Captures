@@ -1,89 +1,89 @@
 import { Button, CircularProgress } from "@mui/material";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
+import { AlertContext } from "../context/AlertMessage";
 import { AuthContext } from "../context/AuthContext";
 import { UploadImageToLumen } from "../services/userContent-Profile";
-import { AlertContext } from "../context/AlertMessage";
 
 const UploadImage = () => {
-  const { setMessage } = useContext(AlertContext)
+  const { setMessage } = useContext(AlertContext);
   const [imagePreview, setImagePreview] = useState("");
-  const { user, logout } = useContext(AuthContext)
-  const [imageDetails, setImageDetails] = useState({ title: "", description: "", tags: [] })
-  const [payloadImage, setPayloadImage] = useState(null)
-  const [disableSubmit, setDisableSubmit] = useState(false)
-  const imageFieldRef = useRef(null)
+  const { user, logout } = useContext(AuthContext);
+  const [imageDetails, setImageDetails] = useState({
+    title: "",
+    description: "",
+    tags: [],
+  });
+  const [payloadImage, setPayloadImage] = useState(null);
+  const [disableSubmit, setDisableSubmit] = useState(false);
+  const imageFieldRef = useRef(null);
 
   const handleFile = (e) => {
     const file = e.target.files[0];
     if (!file) {
       setImagePreview("");
-      setPayloadImage(null)
-    };
+      setPayloadImage(null);
+    }
     setImagePreview(URL.createObjectURL(file));
-    setPayloadImage(e.target.files[0])
+    setPayloadImage(e.target.files[0]);
   };
 
-  const uploadImageDetails = (async (payload) => {
+  const uploadImageDetails = async (payload) => {
     let message;
     try {
-      const response = await UploadImageToLumen(payload)
-      message = `Image was uploaded`
+      const response = await UploadImageToLumen(payload);
+      message = `Image was uploaded`;
 
       // setMessage("image was uploaded")
     } catch (error) {
       // console.log(error)
-      message = error['message']
+      message = error["message"];
       if (error.response.status === 401) {
-        logout()
+        logout();
       }
-
-
     }
-    setImageDetails({ title: "", description: "", tags: [] })
+    setImageDetails({ title: "", description: "", tags: [] });
     if (imageFieldRef.current) {
-      imageFieldRef.current.value = null
-      setImagePreview("")
+      imageFieldRef.current.value = null;
+      setImagePreview("");
     }
-    return message
-  })
-  const handleSubmit = (async (e) => {
-    e.preventDefault()
+    return message;
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (disableSubmit) return;
 
-    setDisableSubmit(() => true)
-    let payload = new FormData()
+    setDisableSubmit(() => true);
+    if (!imageDetails.title || !imageDetails.description) {
+      setMessage("title and description cannot be empty");
+    }
+    let payload = new FormData();
     for (const key in imageDetails) {
       if (key != "tags") {
-        payload.append(key, imageDetails[`${key}`])
+        payload.append(key, imageDetails[`${key}`]);
       } else {
-
-        payload.append("tags", JSON.stringify(imageDetails['tags']))
+        payload.append("tags", JSON.stringify(imageDetails["tags"]));
       }
-
     }
-    payload.append('picture', payloadImage)
+    payload.append("picture", payloadImage);
     // console.log(payload)
-    const msg = await uploadImageDetails(payload)
+    const msg = await uploadImageDetails(payload);
     // console.log(msg, 'msg')
-    setMessage(msg)
+    setMessage(msg);
 
-    setDisableSubmit(() => false)
-    return
-  })
+    setDisableSubmit(() => false);
+    return;
+  };
 
-  const handleChange = ((e) => {
+  const handleChange = (e) => {
     if (e.target.name != "tags") {
-      setImageDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+      setImageDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    } else {
+      let text = e.target.value;
+      let tagContainer = text.split(" ");
+
+      setImageDetails((prev) => ({ ...prev, [e.target.name]: tagContainer }));
     }
-    else {
-      let text = e.target.value
-      let tagContainer = text.split(" ")
-
-      setImageDetails((prev) => ({ ...prev, [e.target.name]: tagContainer }))
-    }
-
-  })
-
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5  mt-5 overflow-hidden m-auto">
@@ -149,7 +149,13 @@ const UploadImage = () => {
         </div>
       </div>
       <div className="m-auto my-4 col-span-2">
-        <Button variant="contained" disabled={disableSubmit} onClick={(e) => handleSubmit(e)}>Upload Image{disableSubmit ? <CircularProgress size={20} /> : ""}</Button>
+        <Button
+          variant="contained"
+          disabled={disableSubmit}
+          onClick={(e) => handleSubmit(e)}
+        >
+          Upload Image{disableSubmit ? <CircularProgress size={20} /> : ""}
+        </Button>
       </div>
     </div>
   );

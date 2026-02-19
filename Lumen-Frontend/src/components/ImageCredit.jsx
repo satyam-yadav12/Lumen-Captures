@@ -2,7 +2,7 @@ import React from 'react'
 
 const ImageCredit = ({ username }) => {
     return (
-        <div class="mt-3 text-xs text-gray-400 leading-relaxed">
+        <div class="mt-3 text-xs text-gray-600 leading-relaxed dark:text-gray-300">
             Image credit:
             <a
                 href={`https://unsplash.com/@${username}`}
@@ -21,7 +21,7 @@ const ImageCredit = ({ username }) => {
             >
                 Unsplash
             </a>.
-            <p class="block mt-1 text-[12px] text-gray-400">
+            <p class="block mt-1 text-[12px] text-gray-600 dark:text-gray-300">
                 Lumen Captures does not claim ownership of this image. All rights remain with the original creator.
             </p>
         </div>

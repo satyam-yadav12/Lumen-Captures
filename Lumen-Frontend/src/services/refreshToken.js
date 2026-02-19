@@ -65,7 +65,8 @@ axiosApi.interceptors.response.use(
                     },
                 });
                 processQueue(null);
-                return axiosApi(originalRequest);
+                
+                return axios();
 
             } catch (err) {
                 processQueue(err);
@@ -79,6 +80,7 @@ axiosApi.interceptors.response.use(
 
             } finally {
                 isRefreshing = false;
+
             }
         }
 
