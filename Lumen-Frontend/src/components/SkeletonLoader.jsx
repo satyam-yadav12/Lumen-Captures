@@ -8,7 +8,7 @@ const SkeletonLoader = () => {
   };
 
   return (
-    <div className="coulumns-1 sm:columns-2 lg:columns-3 max-screen overflow-hidden gap-4 px-4">
+    <div className="coulumns-1 sm:columns-2 lg:columns-3 max-screen overflow-hidden gap-4 px-4 w-[90vw]">
       {boxes.map((val) => {
         const height = getRandomHeight();
         return (

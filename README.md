@@ -73,6 +73,8 @@ Please follow the links below for detailed guides:
 Frontend: [https://lumen-captures.netlify.app/](https://lumen-captures.netlify.app/)  
 Backend health check: [https://lumen-captures.onrender.com/healthz](https://lumen-captures.onrender.com/healthz)
 
+Backend may take few seconds to wake up so please check server status first from above health check route bofore visiting frotend
+
 ## ⚖️ License
 
 MIT License © 2026

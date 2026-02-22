@@ -20,7 +20,8 @@ It provides a smooth image exploration and portfolio experience powered by curso
 
 ### Responsive UI + Dark Mode
 
-![mobile design](./assets\screenshots\mobile.jpeg)
+<!-- ![mobile design](./assets/screenshots/mobile.jpeg) -->
+<img src="./assets/screenshots/mobile.jpeg" width="300" height="auto" alt="mobile design" />
 
 ## Project structure
 
@@ -28,19 +29,7 @@ Lumen-Frontend/
 │  
 ├── src/  
 │ ├── components/  
-<<<<<<< HEAD
-│ ├── pages/  
 │ ├── context/  
-│ ├── hooks/  
-│ ├── services/  
-│ ├── utils/  
-│ └── App.jsx  
-│  
-├── public/  
-├── .env  
-├── package.json  
-=======
-│ ├── context/
 │ ├── hooks/  
 │ ├── pages/  
 │ ├── routes/  
@@ -49,14 +38,13 @@ Lumen-Frontend/
 │ ├── index.css  
 │ ├── main.jsx  
 │ └── App.jsx  
-│  
-├── index.html
+|  
+├── index.html  
 ├── assets/  
 ├── public/  
 ├── package-lock.json  
 ├── package.json  
 ├── vite.config.js  
->>>>>>> c48137b (add: readme files || skeleto.jsx || screenshots)
 └── README.md
 
 ## Setup Instruction
