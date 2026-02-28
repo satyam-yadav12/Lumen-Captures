@@ -8,13 +8,13 @@ const SkeletonLoader = () => {
   };
 
   return (
-    <div className="coulumns-1 sm:columns-2 lg:columns-3 max-screen overflow-hidden gap-4 px-4 w-[90vw]">
+    <div className="coulumns-1 sm:columns-2 lg:columns-3 max-screen overflow-hidden gap-4 px-4   w-[90vw]">
       {boxes.map((val) => {
         const height = getRandomHeight();
         return (
           <div
             key={val}
-            className="group animate-pulse bg-gray-300 rounded-xl mb-6 break-inside-avoid w-[90vw] sm:w-[45vw] lg:w-[30vw] h-max"
+            className="group animate-pulse bg-gray-300 rounded-xl mb-4 mt-0  break-inside-avoid  h-max"
             style={{ height: `${height}px` }}
           ></div>
         );
